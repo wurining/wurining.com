@@ -1,0 +1,27 @@
+baseURL: "https://wurining.com/"
+languageCode: "en-us"
+paginate: 5
+title: "👨🏻‍💻Rn Wu"
+theme: "papermod"
+
+googleAnalytics: "G-GY5HMKSQ35"
+
+params:
+    env: production
+    assets:
+        favicon: "favicon.png"
+        theme_color: "#ffffff"
+    homeInfoParams:
+        Title: 👨🏻‍💻Rining Wu's Pages
+        Content: |
+            Uni. of Leeds \
+            PhD Candidate / AI / Developer
+    socialIcons:
+        - name: "googlescholar"
+          url: "https://scholar.google.com/citations?user=wPAdqNwAAAAJ"
+        - name: "github"
+          url: "https://github.com/wurining"
+        - name: "linkedin"
+          url: "https://www.linkedin.com/in/rining-wu"
+        - name: "X"
+          url: "https://twitter.com/rining_wu"
