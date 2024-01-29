@@ -4,6 +4,6 @@
 
 Uni. of Leeds
 
-PhD Candidate / AI / Developer
+PhD Student / AI / Computational Neuroscience / Developer
 
 <https://wurining.com/>

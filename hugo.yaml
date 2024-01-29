@@ -11,87 +11,87 @@ buildExpired: false
 googleAnalytics: "G-GY5HMKSQ35"
 
 params:
-    env: production
-    title: "👨🏻‍💻Rn Wu"
-    description: "Rining Wu, PhD Student, University of Leeds, AI, Developer, Brain Neuroscience, Computer Science, Machine Learning, Deep Learning, Artificial Intelligence"
-    keywords:
-        [
-            "Rining Wu",
-            "Rn Wu",
-            "Rining",
-            "Rn",
-            "Wu",
-            "University of Leeds",
-            "Leeds",
-            "AI",
-            "Developer",
-            "Brain Neuroscience",
-            "Computer Science",
-            "Machine Learning",
-            "Deep Learning",
-            "Artificial Intelligence",
-        ]
-    author: "Rining Wu"
-    DateFormat: "January 1, 2024"
-    defaultTheme: auto
-    ShowReadingTime: true
-    ShowShareButtons: true
-    ShowPostNavLinks: true
-    ShowBreadCrumbs: true
-    ShowCodeCopyButtons: false
-    ShowWordCount: true
-    ShowRssButtonInSectionTermList: true
-    UseHugoToc: true
-    disableSpecial1stPost: false
-    disableScrollToTop: false
+  env: production
+  title: "👨🏻‍💻Rn Wu"
+  description: "Rining Wu, PhD Student, University of Leeds, AI, Developer, Brain Neuroscience, Computer Science, Machine Learning, Deep Learning, Artificial Intelligence"
+  keywords:
+    [
+      "Rining Wu",
+      "Rn Wu",
+      "Rining",
+      "Rn",
+      "Wu",
+      "University of Leeds",
+      "Leeds",
+      "AI",
+      "Developer",
+      "Brain Neuroscience",
+      "Computer Science",
+      "Machine Learning",
+      "Deep Learning",
+      "Artificial Intelligence",
+    ]
+  author: "Rining Wu"
+  DateFormat: "January 1, 2024"
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: false
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
 
-    assets:
-        favicon: "favicon.png"
-        favicon16x16: "favicon-16x16.png"
-        favicon32x32: "favicon-32x32.png"
-        apple_touch_icon: "favicon.png"
-        safari_pinned_tab: "favicon.png"
+  assets:
+    favicon: "favicon.png"
+    favicon16x16: "favicon-16x16.png"
+    favicon32x32: "favicon-32x32.png"
+    apple_touch_icon: "favicon.png"
+    safari_pinned_tab: "favicon.png"
 
-    socialIcons:
-        - name: "googlescholar"
-          url: "https://scholar.google.com/citations?user=wPAdqNwAAAAJ"
-        - name: "github"
-          url: "https://github.com/wurining"
-        - name: "linkedin"
-          url: "https://www.linkedin.com/in/rining-wu"
-        - name: "X"
-          url: "https://twitter.com/rining_wu"
+  socialIcons:
+    - name: "googlescholar"
+      url: "https://scholar.google.com/citations?user=wPAdqNwAAAAJ"
+    - name: "github"
+      url: "https://github.com/wurining"
+    - name: "linkedin"
+      url: "https://www.linkedin.com/in/rining-wu"
+    - name: "X"
+      url: "https://twitter.com/rining_wu"
 
-    homeInfoParams:
-        Title: 👨🏻‍💻Rining Wu's Pages
-        Content: |
-            Uni. of Leeds \
-            PhD Candidate / AI / Developer
+  homeInfoParams:
+    Title: 👨🏻‍💻Rining Wu's Pages
+    Content: |
+      Uni. of Leeds \
+      PhD Student / AI / Computational Neuroscience / Developer
 
-    fuseOpts:
-        isCaseSensitive: false
-        shouldSort: true
-        location: 0
-        distance: 1000
-        threshold: 0.4
-        minMatchCharLength: 0
-        keys: ["title", "permalink", "summary", "content"]
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
 outputs:
-    home:
-        - HTML
-        - RSS
-        - JSON # is necessary
+  home:
+    - HTML
+    - RSS
+    - JSON # is necessary
 menu:
-    main:
-        - identifier: categories
-          name: Categories
-          url: /categories/
-          weight: 10
-        - identifier: tags
-          name: Tags
-          url: /tags/
-          weight: 20
-        - identifier: lab
-          name: Lab Page
-          url: https://sites.google.com/site/jiankliu/home
-          weight: 30
+  main:
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 10
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 20
+    - identifier: lab
+      name: Lab Page
+      url: https://sites.google.com/site/jiankliu/home
+      weight: 30
