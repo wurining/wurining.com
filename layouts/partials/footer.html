@@ -134,3 +134,35 @@
     });
 </script>
 {{- end }}
+
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true,
+            processEnvironments: true,
+        }
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js"
+    integrity="sha256-kbAFUDxdHwlYv01zraGjvjNZayxKtdoiJ38bDTFJtaQ=" crossorigin="anonymous">
+    </script>
+{{- $pseudocode_css := resources.Get "css/pseudocode.min.css" }}
+{{- $pseudocode_js := resources.Get "js/pseudocode.min.js" }}
+<link rel="stylesheet" href="{{ $pseudocode_css.RelPermalink }}">
+<script src={{ $pseudocode_js.RelPermalink }}></script>
+<script>
+    var DEFAULT_OPTIONS = {
+        indentSize: '1.2em',
+        commentDelimiter: '//',
+        lineNumber: true,
+        lineNumberPunc: ':',
+        noEnd: false,
+        captionCount: undefined
+    };
+    const all_pseudocodes = document.querySelectorAll("pre.pseudocode");
+    for (let el of all_pseudocodes) {
+        pseudocode.renderElement(el, DEFAULT_OPTIONS);
+    }
+</script>

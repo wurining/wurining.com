@@ -36,14 +36,18 @@ params:
   defaultTheme: auto
   ShowReadingTime: true
   ShowShareButtons: true
+  ShareButtons: ["x", "linkedin"]
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: false
   ShowWordCount: true
   ShowRssButtonInSectionTermList: true
+  ShowPageNums: true
   UseHugoToc: true
   disableSpecial1stPost: false
   disableScrollToTop: false
+  hideSummary: false
+  hideAuthor: true
 
   assets:
     favicon: "favicon.png"
@@ -67,6 +71,7 @@ params:
     Content: |
       Uni. of Leeds \
       PhD Student / AI / Computational Neuroscience / Developer
+    homeSection: publications
 
   fuseOpts:
     isCaseSensitive: false
@@ -81,16 +86,24 @@ outputs:
     - HTML
     - RSS
     - JSON # is necessary
+cover:
+  responsiveImages: true
 menu:
   main:
-    - identifier: categories
-      name: Categories
-      url: /categories/
-      weight: 10
+    # - identifier: publications
+    #   name: Publications
+    #   url: /publications/
+    #   weight: 10
+    - name: Archive
+      url: archives
+      weight: 5
     - identifier: tags
       name: Tags
       url: /tags/
       weight: 20
+    - name: Search
+      url: search/
+      weight: 25
     - identifier: lab
       name: Lab Page
       url: https://sites.google.com/site/jiankliu/home
