@@ -41,10 +41,20 @@
     border-radius: var(--radius);
     transition: transform 0.1s;
     border: 1px solid var(--border);
+    transition-property: background-color, color, box-shadow, transform;
+    transition-duration: .4s;
+    transition-timing-function: cubic-bezier(.33, 1, .68, 1);
 }
 
 .post-entry:active {
     transform: scale(0.96);
+}
+
+.post-entry:hover {
+    box-shadow: 0 0 50px 15px #00000010;
+    /* box-shadow: 0 0 50px 25px var(--entry); */
+    /* border-radius: 0; */
+    /* border: none; */
 }
 
 .tag-entry .entry-cover {

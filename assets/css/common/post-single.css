@@ -5,7 +5,7 @@
 
 .post-title {
     margin-bottom: 2px;
-    font-size: 40px;
+    font-size: 32px;
 }
 
 .post-description {
@@ -44,17 +44,17 @@
 }
 
 .post-content h1 {
-    margin: 40px auto 32px;
-    font-size: 40px;
+    margin: 32px auto 32px;
+    font-size: 32px;
 }
 
 .post-content h2 {
     margin: 32px auto 24px;
-    font-size: 32px;
+    font-size: 28px;
 }
 
 .post-content h3 {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .post-content h4 {
@@ -332,12 +332,15 @@
     font-size: 14px;
     line-height: 34px;
     background: var(--code-bg);
+    transition-property: background-color, color;
+    transition-duration: .4s;
+    transition-timing-function: cubic-bezier(.33, 1, .68, 1);
 }
 
 .post-tags a:hover,
 .paginav a:hover {
-    background: var(--border);
-    color: #3e3e3e;
+    background: #0064aa;
+    color: #ffffff;
 }
 
 .share-buttons {
