@@ -2,7 +2,7 @@
 
 ## About Me
 
-Uni. of Leeds
+Uni. of Leeds & Uni. of Birmingham
 
 PhD Student / AI / Computational Neuroscience / Developer
 
