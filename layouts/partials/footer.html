@@ -1,4 +1,8 @@
 {{- if not (.Param "hideFooter") }}
+<div style="position: fixed; bottom: 10px; left: 10px; width: 30px; height: 30px; z-index: 1000;">
+    <script type="text/javascript" id="clstr_globe"
+        src="//clustrmaps.com/globe.js?d=O8dorfO8mCbPJwLl2FzAM_T8svaHwG8E7IctspbAYGg"></script>
+</div>
 <footer class="footer">
     {{- if site.Copyright }}
     <span>{{ site.Copyright | markdownify }}</span>
