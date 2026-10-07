@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PostCard from "../../../components/PostCard.astro";
+import RssIcon from "../../../components/RssIcon.astro";
+import { getTags } from "../../../lib/content";
+export async function getStaticPaths() { return (await getTags()).map((tag) => ({ params: { slug: tag.slug }, props: { tag } })); }
+const { tag } = Astro.props;
+---
+<BaseLayout title={tag.name} rss={`/tags/${tag.slug}/index.xml`}>
+  <header class="page-header"><h1>{tag.name}<RssIcon href={`/tags/${tag.slug}/index.xml`} /></h1></header>
+  {tag.posts.map((post) => <PostCard post={post} tag />)}
+</BaseLayout>

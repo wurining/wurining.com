@@ -1,0 +1,27 @@
+---
+import { site } from "../lib/site";
+import ThemeToggle from "./ThemeToggle";
+const pathname = Astro.url.pathname.replace(/\/$/, "");
+---
+<header class="header">
+  <nav class="nav">
+    <div class="logo">
+      <a href="/" accesskey="h" title={`${site.title} (Alt + H)`}>{site.title}</a>
+      <div class="logo-switches"><ThemeToggle client:load /></div>
+    </div>
+    <ul id="menu">
+      {site.menu.map((item) => {
+        const external = /^https?:\/\//.test(item.url);
+        const href = external ? item.url : `/${item.url.replace(/^\//, "")}`;
+        const active = !external && href.replace(/\/$/, "") === pathname;
+        const search = href.replace(/\/$/, "") === "/search";
+        return <li>
+          <a href={href} title={`${item.name}${search ? " (Alt + /)" : ""}`} accesskey={search ? "/" : undefined}>
+            <span class:list={{ active }}>{item.name}</span>
+            {external && <>{" "}<svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" /><path d="M15 3h6v6" /><path d="M10 14L21 3" /></svg></>}
+          </a>
+        </li>;
+      })}
+    </ul>
+  </nav>
+</header>

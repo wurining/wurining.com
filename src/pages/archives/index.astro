@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostMeta from "../../components/PostMeta.astro";
+import RssIcon from "../../components/RssIcon.astro";
+import { getContentPage, getPublications } from "../../lib/content";
+const page = await getContentPage("archives");
+const posts = await getPublications();
+const years = [...new Set(posts.map((post) => post.date.getUTCFullYear()))];
+const monthName = (date: Date) => new Intl.DateTimeFormat("en-US", { month: "long", timeZone: "UTC" }).format(date);
+---
+<BaseLayout title={page?.title ?? "Archive"} description={page?.description ?? "archives"} contentPage>
+  <header class="page-header"><h1>{page?.title ?? "Archive"}<RssIcon href="/index.xml" /></h1></header>
+  {years.map((year) => {
+    const yearPosts = posts.filter((post) => post.date.getUTCFullYear() === year);
+    const months = [...new Set(yearPosts.map((post) => post.date.getUTCMonth()))];
+    return <div class="archive-year">
+      <h2 class="archive-year-header">{year}<sup class="archive-count">&nbsp;&nbsp;{yearPosts.length}</sup></h2>
+      {months.map((month) => {
+        const monthPosts = yearPosts.filter((post) => post.date.getUTCMonth() === month);
+        return <div class="archive-month">
+          <h3 class="archive-month-header">{monthName(monthPosts[0].date)}<sup class="archive-count">&nbsp;&nbsp;{monthPosts.length}</sup></h3>
+          <div class="archive-posts">{monthPosts.map((post) => <div class="archive-entry">
+            <h3 class="archive-entry-title entry-hint-parent">{post.title}</h3>
+            <div class="archive-meta"><PostMeta post={post} /></div>
+            <a class="entry-link" aria-label={`post link to ${post.title}`} href={post.url}></a>
+          </div>)}</div>
+        </div>;
+      })}
+    </div>;
+  })}
+</BaseLayout>

@@ -1,0 +1,6 @@
+---
+import { formatDate, type Post } from "../lib/content";
+interface Props { post: Post; }
+const { post } = Astro.props;
+---
+<span title={post.date.toISOString()}>{formatDate(post.date)}</span>{` · ${post.readingTime} min · ${post.wordCount} words`}
