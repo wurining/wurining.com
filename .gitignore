@@ -4,6 +4,14 @@ dist/
 .astro/
 .DS_Store
 *.log
+__pycache__/
+*.py[cod]
+
+# Local migration verification artifacts
+/docs/migration-verification.md
+/scripts/verify-site.py
+/tests/static-contract.test.mjs
+/tests/fixtures/hugo-baseline.json
 
 # Local environment files must never be published
 .env
