@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import RssIcon from "../../components/RssIcon.astro";
+import { getPublications } from "../../lib/content";
+import { site } from "../../lib/site";
+const posts = await getPublications();
+---
+<BaseLayout title="Publications" description={`Publications - ${site.title}`} socialDescription={site.description} rss="/publications/index.xml" section>
+  <header class="page-header"><h1>Publications<RssIcon href="/publications/index.xml" /></h1></header>
+  {posts.map((post) => <PostCard post={post} />)}
+</BaseLayout>

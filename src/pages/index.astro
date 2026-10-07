@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PostCard from "../components/PostCard.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../lib/site";
+import { getPublications } from "../lib/content";
+const posts = await getPublications();
+---
+<BaseLayout rss="/index.xml">
+  <article class="first-entry home-info">
+    <header class="entry-header"><h1>{site.homeInfo.title}</h1></header>
+    <div class="entry-content" set:html={site.homeInfo.contentHtml} />
+    <footer class="entry-footer"><div class="social-icons">{site.socialIcons.map((icon) => <a href={icon.url} target="_blank" rel="noopener noreferrer me" title={icon.name.charAt(0).toUpperCase() + icon.name.slice(1)}><Icon name={icon.name} /></a>)}</div></footer>
+  </article>
+  {posts.map((post) => <PostCard post={post} />)}
+</BaseLayout>

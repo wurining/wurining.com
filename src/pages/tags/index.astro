@@ -1,0 +1,9 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getTags } from "../../lib/content";
+const tags = await getTags();
+---
+<BaseLayout title="Tags" rss="/tags/index.xml">
+  <header class="page-header"><h1>Tags</h1></header>
+  <ul class="terms-tags">{tags.map((tag) => <li><a href={`/tags/${tag.slug}/`}>{tag.name} <sup><strong><sup>{tag.posts.length}</sup></strong></sup>{" "}</a></li>)}</ul>
+</BaseLayout>

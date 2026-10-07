@@ -1,0 +1,42 @@
+---
+import { site } from "../lib/site";
+---
+<div style="position: fixed; bottom: 10px; left: 10px; width: 30px; height: 30px; z-index: 1000;">
+  <script is:inline type="text/javascript" id="clstr_globe" src="https://clustrmaps.com/globe.js?d=O8dorfO8mCbPJwLl2FzAM_T8svaHwG8E7IctspbAYGg"></script>
+</div>
+<footer class="footer">
+  <span>&copy; {new Date().getFullYear()} <a href="/">{site.title}</a></span>{" "}
+  <span>Powered by <a href="https://astro.build/" rel="noopener noreferrer" target="_blank">Astro</a> &amp; <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a> - <a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">京ICP备17059282号-1</a></span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z" /></svg>
+</a>
+<script>
+  const menu = document.getElementById("menu");
+  if (menu) {
+    try { menu.scrollLeft = Number(localStorage.getItem("menu-scroll-position")) || 0; } catch {}
+    menu.addEventListener("scroll", () => {
+      try { localStorage.setItem("menu-scroll-position", String(menu.scrollLeft)); } catch {}
+    });
+  }
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", (event) => {
+      const id = decodeURIComponent(anchor.hash.slice(1));
+      const target = document.getElementById(id);
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      if (id === "top") history.replaceState(null, "", `${location.pathname}${location.search}`);
+      else history.pushState(null, "", anchor.hash);
+    });
+  });
+  const topLink = document.getElementById("top-link");
+  function updateTopLink() {
+    if (!topLink) return;
+    const visible = document.documentElement.scrollTop > 800 || document.body.scrollTop > 800;
+    topLink.style.visibility = visible ? "visible" : "hidden";
+    topLink.style.opacity = visible ? "1" : "0";
+  }
+  window.addEventListener("scroll", updateTopLink, { passive: true });
+  updateTopLink();
+</script>

@@ -1,0 +1,12 @@
+---
+import { getTags } from "../lib/content";
+import { site } from "../lib/site";
+export async function getStaticPaths() {
+  const aliases = [{ alias: "page/1", target: "/" }, { alias: "publications/page/1", target: "/publications/" },
+    ...(await getTags()).map((tag) => ({ alias: `tags/${tag.slug}/page/1`, target: `/tags/${tag.slug}/` }))];
+  return aliases.map(({ alias, target }) => ({ params: { alias }, props: { target } }));
+}
+const { target } = Astro.props;
+const canonical = new URL(target, site.url).href;
+---
+<!doctype html><html lang="en-us"><head><meta charset="utf-8" /><meta http-equiv="refresh" content={`0; url=${canonical}`} /><link rel="canonical" href={canonical} /><meta name="robots" content="noindex" /></head><body><a href={canonical}>Redirecting…</a></body></html>
