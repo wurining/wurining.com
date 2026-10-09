@@ -1,5 +1,6 @@
 import { parse } from 'yaml';
 import MarkdownIt from 'markdown-it';
+import { externalLinkPlugin } from './links';
 
 export interface Post {
   slug: string;
@@ -33,7 +34,7 @@ export type Publication = Post;
 const sourceFiles = import.meta.glob('../content/**/*.md', {
   query: '?raw', import: 'default', eager: true,
 }) as Record<string, string>;
-const markdown = new MarkdownIt({ html: true, linkify: true });
+const markdown = new MarkdownIt({ html: true, linkify: true }).use(externalLinkPlugin);
 
 function frontmatter(raw: string): { data: Record<string, any>; content: string } {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
@@ -87,7 +88,7 @@ export async function getPublications(): Promise<Post[]> {
     const converted = convertShortcodes(content, assetBase);
     const headings: { level: number; title: string; id: string }[] = [];
     const seen = new Map<string, number>();
-    const renderer = new MarkdownIt({ html: true, linkify: true });
+    const renderer = new MarkdownIt({ html: true, linkify: true }).use(externalLinkPlugin);
     renderer.renderer.rules.heading_open = (tokens, index, options, _env, self) => {
       const title = tokens[index + 1].content;
       const base = tagSlug(title);

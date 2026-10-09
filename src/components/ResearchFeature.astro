@@ -1,16 +1,20 @@
 ---
 import Arrow from "./Arrow.astro";
 import Icon from "./Icon.astro";
+import ResearchTags from "./ResearchTags.astro";
 import type { FeaturedResearch } from "../lib/profile";
+import { externalLinkAttributes } from "../lib/links";
 interface Props { research: FeaturedResearch; }
 const { research } = Astro.props;
 ---
 <article class="research-feature">
   <div class="research-feature-heading">
     <p class="research-kicker" data-reveal data-reveal-delay="40">{research.id === "vi-st" ? "Vi-ST" : research.id} · {research.venue} {research.year}</p>
-    <h2 class="research-headline" data-reveal data-reveal-delay="80"><a class="link-highlight" href={research.url}>{research.title}</a></h2>
+    <div class="research-title-row" data-reveal data-reveal-delay="80">
+      <h2 class="research-headline"><a class="link-highlight" href={research.url}>{research.title}</a></h2>
+      <ResearchTags tags={research.tags} />
+    </div>
     <p class="research-summary" data-reveal data-reveal-delay="120">{research.summary}</p>
-    <p class="research-authors" data-reveal data-reveal-delay="160">{research.authors.join(", ")}</p>
   </div>
   <figure class="research-model" data-reveal data-reveal-delay="180">
     <a href={research.url} aria-label={`Read the research overview: ${research.title}`}>
@@ -18,10 +22,10 @@ const { research } = Astro.props;
     </a>
   </figure>
   <nav class="research-actions" aria-label="Featured research resources" data-reveal data-reveal-delay="80">
-    <a class="text-link" href={research.paperUrl}>
+    <a class="text-link" href={research.paperUrl} {...externalLinkAttributes(research.paperUrl)}>
       <svg class="action-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z" /><path d="M14 3v6h6M8 13h8M8 17h5" /></svg>
       <span>Read paper</span><Arrow external />
     </a>
-    <a class="text-link" href={research.codeUrl}><span class="action-icon" aria-hidden="true"><Icon name="github" /></span><span>View code</span><Arrow external /></a>
+    <a class="text-link" href={research.codeUrl} {...externalLinkAttributes(research.codeUrl)}><span class="action-icon" aria-hidden="true"><Icon name="github" /></span><span>View code</span><Arrow external /></a>
   </nav>
 </article>

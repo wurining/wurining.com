@@ -1,0 +1,6 @@
+---
+import type { ResearchTopic } from "../lib/profile";
+interface Props { tags: readonly ResearchTopic[]; }
+const { tags } = Astro.props;
+---
+<span class="research-tags">{tags.map((tag) => <span class="research-tag">{tag}</span>)}</span>

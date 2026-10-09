@@ -132,7 +132,6 @@ button#theme-toggle:hover { color: var(--accent); background: var(--accent-soft)
 .profile-photo { width: 144px; height: 144px; margin-bottom: 22px; border-radius: 6px; background: #ffffff; }
 .profile-name { display: block; font-size: 32px; font-weight: 650; letter-spacing: -0.045em; line-height: 1.2; color: var(--primary); }
 .profile-role { margin-top: 8px; font-size: 18px; line-height: 1.45; }
-.profile-affiliation { color: var(--secondary); font-size: 14px; line-height: 1.65; margin-top: 10px; }
 .profile-summary { margin-top: 26px; }
 .profile-bio { color: var(--content); font-size: 16px; line-height: 1.55; }
 .profile-bio + .profile-bio { margin-top: 8px; }
@@ -150,8 +149,11 @@ button#theme-toggle:hover { color: var(--accent); background: var(--accent-soft)
 .selected-research > .section-label { border-left: 2px solid var(--section-accent); padding-left: 9px; }
 .research-kicker { color: var(--secondary); font-size: 17px; line-height: 1.5; margin-bottom: 9px; }
 .research-headline { font-size: clamp(34px, 2.6vw, 40px); line-height: 1.15; letter-spacing: -0.04em; font-weight: 650; max-width: 960px; }
+.research-title-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 14px; }
+.research-title-row .research-headline { min-width: 0; max-width: 100%; }
+.research-tags { display: inline-flex; flex-wrap: wrap; gap: 6px; max-width: 100%; vertical-align: middle; }
+.research-tag { display: inline-flex; align-items: center; padding: 2px 8px; border: 1px solid var(--border); border-radius: 3px; color: var(--secondary); background: var(--code-bg); font-size: 13px; line-height: 1.45; font-weight: 400; letter-spacing: normal; white-space: nowrap; }
 .research-summary { color: var(--secondary); font-size: 18px; line-height: 1.55; max-width: 77ch; margin-top: 12px; }
-.research-authors { color: var(--secondary); font-size: 16px; line-height: 1.6; margin-top: 10px; }
 .research-model { text-align: left; width: 100%; max-width: 800px; margin: 22px 0 18px; background: #ffffff; border-radius: 2px; }
 .research-model a { display: block; border-radius: 2px; }
 .research-model img { display: block; width: 100%; height: auto; max-width: none; margin: 0; }
@@ -233,9 +235,38 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
 .about-content > p:first-child { color: var(--primary); font-size: 21px; line-height: 1.6; }
 .about-content ul { padding-left: 22px; }
 .about-content li { margin: 15px 0; }
-.methods-tools { margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--border); }
-.methods-tools h2 { font-size: 17px; line-height: 1.5; font-weight: 550; margin-bottom: 10px; }
-.methods-tools-list { display: flex; flex-wrap: wrap; column-gap: 28px; row-gap: 4px; padding-left: 18px; color: var(--secondary); font-size: 14px; line-height: 1.65; }
+.about-introduction { font-size: 17px; line-height: 1.75; }
+.about-introduction > p:first-child { font-size: 20px; line-height: 1.6; }
+.about-section-nav { display: flex; flex-wrap: wrap; gap: 8px 24px; padding: 18px 0 22px; font-size: 14px; line-height: 1.6; }
+.about-section-nav a { color: var(--accent); text-decoration: underline; text-decoration-color: transparent; transition: color 240ms ease, text-decoration-color 240ms ease; }
+.about-section-nav a:hover { text-decoration-color: currentColor; }
+.about-section { margin-top: 36px; padding-top: 26px; border-top: 1px solid var(--border); }
+.about-section:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.about-section:focus { outline: none; }
+.about-section-title { font-size: 24px; font-weight: 600; line-height: 1.35; letter-spacing: -0.025em; margin-bottom: 22px; }
+.about-section .post-content { font-size: 16px; line-height: 1.75; }
+.about-section .about-content > p:first-child { font-size: 16px; color: var(--content); line-height: 1.75; }
+.about-section .post-content p,
+.about-section .post-content ul { margin-bottom: 14px; }
+.about-section .post-content li { margin: 8px 0; }
+.cv-entry { padding: 22px 0; border-top: 1px solid var(--border); }
+.cv-entry:first-child { padding-top: 0; border-top: 0; }
+.cv-entry:last-child { padding-bottom: 0; }
+.cv-entry-title { display: block; font-size: 19px; font-weight: 550; line-height: 1.4; letter-spacing: -0.015em; margin: 0; }
+.cv-entry-meta { display: block; color: var(--secondary); font-size: 14px; font-weight: 400; line-height: 1.6; letter-spacing: normal; font-variant-numeric: tabular-nums; margin-top: 6px; }
+.cv-entry-content { margin-top: 14px; }
+.cv-entry-content > :last-child { margin-bottom: 0; }
+.cv-entry-content ul { padding-left: 21px; }
+.cv-entry-disclosure > summary { display: flex; justify-content: space-between; align-items: center; gap: 18px; list-style: none; cursor: pointer; }
+.cv-entry-disclosure > summary::-webkit-details-marker { display: none; }
+.cv-entry-disclosure > summary h3 { margin: 0; min-width: 0; }
+.cv-entry-disclosure > summary::after { content: "+"; flex: 0 0 18px; color: var(--secondary); font-size: 22px; line-height: 1; text-align: center; transition: color 240ms ease; }
+.cv-entry-disclosure > summary:hover::after { color: var(--accent); }
+.cv-entry-disclosure[open] > summary::after { content: "−"; }
+.cv-entry-disclosure[open] .cv-entry-content { animation: cv-disclose 650ms var(--ease-soft); }
+.about-tools .post-content { color: var(--secondary); font-size: 15px; }
+.about-tools .post-content strong { color: var(--primary); font-weight: 550; }
+@keyframes cv-disclose { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 .not-found { position: static; height: 45vh; font-size: 96px; letter-spacing: -0.05em; }
 
 /* One opt-in treatment for hand-written links and Markdown text links.
@@ -287,7 +318,6 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
   .profile-photo { width: 108px; height: 108px; margin-bottom: 20px; }
   .profile-name { font-size: 30px; }
   .profile-role { font-size: 17px; margin-top: 7px; }
-  .profile-affiliation { font-size: 13px; max-width: 100%; }
   .profile-summary { margin-top: 26px; }
   .profile-bio { max-width: 41ch; }
   .profile-links { margin-top: 18px; gap: 12px 22px; }
@@ -298,7 +328,6 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
   .research-kicker { font-size: 15px; margin-bottom: 9px; }
   .research-headline { font-size: 32px; line-height: 1.18; letter-spacing: -0.035em; }
   .research-summary { font-size: 16px; line-height: 1.65; margin-top: 13px; }
-  .research-authors { font-size: 14px; line-height: 1.6; margin-top: 12px; }
   .research-model { margin-top: 24px; margin-bottom: 14px; }
   .research-actions { font-size: 15px; gap: 16px; padding-bottom: 22px; }
   .research-actions a { gap: 7px; }
@@ -316,6 +345,12 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
   .post-entry .entry-header h2 { font-size: 21px; }
   .post-content, .about-content { font-size: 16px; }
   .about-content > p:first-child { font-size: 19px; }
+  .about-section-nav { gap: 8px 20px; padding-top: 12px; padding-bottom: 20px; }
+  .about-section { margin-top: 30px; padding-top: 22px; }
+  .about-section-title { font-size: 22px; margin-bottom: 20px; }
+  .cv-entry-title { font-size: 18px; }
+  .cv-entry-meta { font-size: 13px; }
+  .cv-entry { padding: 20px 0; }
   .post-content h2 { font-size: 25px; }
   .archive-month { display: block; }
   .archive-month-header { width: auto; margin-bottom: 10px; }

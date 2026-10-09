@@ -1,7 +1,10 @@
+export type ResearchTopic = 'Visual Neuroscience' | 'Protein Modelling' | 'Industrial Sensing';
+
 export interface FeaturedResearch {
   id: string;
   title: string;
   paperTitle: string;
+  tags: ResearchTopic[];
   summary: string;
   venue: string;
   year: number;
@@ -17,6 +20,7 @@ export interface OtherResearch {
   id: string;
   title: string;
   paperTitle: string;
+  tags: ResearchTopic[];
   venue: string;
   year: number;
   url: string;
@@ -26,7 +30,6 @@ export interface OtherResearch {
 export interface Profile {
   name: string;
   role: string;
-  affiliation: string;
   bio: string;
   bioParagraphs: string[];
   skills: string[];
@@ -37,14 +40,13 @@ export interface Profile {
 }
 
 const bioParagraphs = [
-  'My PhD research uses vision models to predict how retinal neurons respond to natural video.',
-  'I have also co-authored studies on protein solubility and gas–water flow prediction.',
+  'My interests lie in machine learning, computer vision, and neuroscience.',
+  'I also enjoy building LLM agents to make everyday tasks easier.',
 ];
 
 export const profile: Profile = {
   name: 'Rining Wu',
   role: 'PhD Researcher',
-  affiliation: 'University of Leeds · University of Birmingham',
   bio: bioParagraphs.join(' '),
   bioParagraphs,
   skills: ['Machine learning', 'Python', 'Computer vision', 'Data analysis'],
@@ -59,6 +61,7 @@ export const profile: Profile = {
       id: 'vi-st',
       title: 'Predicting how neurons respond to video',
       paperTitle: 'Aligning Neuronal Coding of Dynamic Visual Scenes with Foundation Vision Models',
+      tags: ['Visual Neuroscience'],
       summary: 'Vi-ST combines a pretrained vision model with temporal processing to predict how retinal neurons respond to natural video. The study examines how visual changes over time relate to neural activity.',
       venue: 'ECCV',
       year: 2024,
@@ -75,6 +78,7 @@ export const profile: Profile = {
       id: 'hybridgcn',
       title: 'Predicting protein solubility',
       paperTitle: 'HybridGCN for protein solubility prediction with adaptive weighting of multiple features',
+      tags: ['Protein Modelling'],
       venue: 'Journal of Cheminformatics',
       year: 2023,
       url: 'https://doi.org/10.1186/s13321-023-00788-8',
@@ -84,6 +88,7 @@ export const profile: Profile = {
       id: 'gas-water-sensors',
       title: 'Deep learning for industrial sensor data',
       paperTitle: 'Enhancing Accuracy in Gas–Water Two-Phase Flow Sensor Systems Through Deep-Learning-Based Computational Framework',
+      tags: ['Industrial Sensing'],
       venue: 'IEEE Sensors Journal',
       year: 2024,
       url: 'https://doi.org/10.1109/JSEN.2024.3475292',
@@ -93,6 +98,7 @@ export const profile: Profile = {
       id: 'gas-water-time-series',
       title: 'Modelling flow from sensor time series',
       paperTitle: 'Harnessing Multiple Time-Series Sensor Data: Evaluating the Efficacy of Various Machine Learning Models in Predicting Gas-Water Two-Phase Flow',
+      tags: ['Industrial Sensing'],
       venue: 'TFEC',
       year: 2024,
       url: 'https://doi.org/10.1615/tfec2024.ml.050649',

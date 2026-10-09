@@ -4,9 +4,9 @@ import { site } from "../lib/site";
 <footer class="footer">
   <div class="footer-navigation">
     <span>&copy; {new Date().getFullYear()} <a href="/">{site.author}</a></span>
-    <nav aria-label="More pages"><a href="/archives/">Archive</a><a href="/tags/">Tags</a><a href="/index.xml">RSS</a><a href="https://sites.google.com/site/jiankliu/home">Lab page <span aria-hidden="true">↗</span></a></nav>
+    <nav aria-label="More pages"><a href="/archives/">Archive</a><a href="/tags/">Tags</a><a href="/index.xml">RSS</a><a href="https://sites.google.com/site/jiankliu/home" target="_blank" rel="noopener noreferrer">Lab page <span aria-hidden="true">↗</span></a></nav>
   </div>
-  <div class="footer-details"><span>Built with <a href="https://astro.build/" rel="noreferrer">Astro</a></span><a href="https://beian.miit.gov.cn/" rel="noreferrer">京ICP备17059282号-1</a></div>
+  <div class="footer-details"><span>Built with <a href="https://astro.build/" target="_blank" rel="noopener noreferrer">Astro</a></span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">京ICP备17059282号-1</a></div>
   {import.meta.env.PROD && <div class="visitor-map" id="visitor-map" aria-hidden="true"></div>}
 </footer>
 <a href="#top" aria-label="Back to top" title="Back to top (Alt + G)" class="top-link" id="top-link" accesskey="g" hidden>

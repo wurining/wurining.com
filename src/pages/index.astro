@@ -1,10 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ResearchFeature from "../components/ResearchFeature.astro";
+import ResearchTags from "../components/ResearchTags.astro";
 import Arrow from "../components/Arrow.astro";
 import { profile } from "../lib/profile";
+import { externalLinkAttributes } from "../lib/links";
 ---
-<BaseLayout rss="/index.xml" dossier>
+<BaseLayout rss="/index.xml" description={profile.bio} dossier>
   <section class="selected-research" aria-labelledby="selected-research-heading">
     <h2 class="section-label" id="selected-research-heading" data-reveal>Selected research</h2>
     {profile.featuredResearch.map((research) => <ResearchFeature research={research} />)}
@@ -13,8 +15,8 @@ import { profile } from "../lib/profile";
     <h2 class="section-label" id="other-research-heading" data-reveal>Other research</h2>
     <ul class="research-list">
       {profile.otherResearch.map((research, index) => <li data-reveal data-reveal-delay={index * 55}>
-        <a class="research-row link-highlight-trigger" href={research.url} title={research.paperTitle}>
-          <span class="research-row-title"><span class="link-highlight">{research.title}</span></span>
+        <a class="research-row link-highlight-trigger" href={research.url} title={research.paperTitle} {...externalLinkAttributes(research.url)}>
+          <span class="research-row-title"><span class="link-highlight">{research.title}</span>{" "}<ResearchTags tags={research.tags} /></span>
           <span class="research-row-meta">{research.venue} · {research.year}</span>
           <Arrow />
         </a>
@@ -27,7 +29,7 @@ import { profile } from "../lib/profile";
     <ul class="highlights-list">
       {profile.highlights.map((highlight, index) => <li data-reveal data-reveal-delay={index * 55}>
         <span class="highlight-year">{highlight.year}</span>
-        <span class="highlight-text"><a class="text-link link-highlight" href={highlight.url}>{highlight.text}<Arrow /></a></span>
+        <span class="highlight-text"><a class="text-link link-highlight" href={highlight.url} {...externalLinkAttributes(highlight.url)}>{highlight.text}<Arrow /></a></span>
       </li>)}
     </ul>
   </section>}

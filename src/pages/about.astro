@@ -3,15 +3,79 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import MarkdownIt from "markdown-it";
 import source from "../content/about.md?raw";
 import { profile } from "../lib/profile";
-const html = new MarkdownIt({ html: false, linkify: true }).render(source);
+import { externalLinkPlugin } from "../lib/links";
+
+const markdown = new MarkdownIt({ html: false, linkify: true }).use(externalLinkPlugin);
+type Token = ReturnType<typeof markdown.parse>[number];
+interface Block { title: string; tokens: Token[]; }
+
+// Group parsed headings without changing the Markdown source or accepting raw HTML.
+function headingBlocks(tokens: Token[], heading: "h2" | "h3") {
+  const introduction: Token[] = [];
+  const blocks: Block[] = [];
+  let current: Block | undefined;
+  for (let index = 0; index < tokens.length; index += 1) {
+    const token = tokens[index];
+    if (token.type === "heading_open" && token.tag === heading && token.level === 0) {
+      current = { title: tokens[index + 1]?.content ?? "", tokens: [] };
+      blocks.push(current);
+      index += 2;
+    } else {
+      (current?.tokens ?? introduction).push(token);
+    }
+  }
+  return { introduction, blocks };
+}
+function render(tokens: Token[]) {
+  return markdown.renderer.render(tokens, markdown.options, {});
+}
+function headingId(title: string) {
+  return title.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+function entry(block: Block) {
+  const tokens = block.tokens;
+  const hasMetadata = tokens[0]?.type === "paragraph_open" && tokens[1]?.type === "inline" && tokens[2]?.type === "paragraph_close";
+  return {
+    title: block.title,
+    metadata: hasMetadata ? markdown.renderer.renderInline(tokens[1].children ?? [], markdown.options, {}) : "",
+    html: render(hasMetadata ? tokens.slice(3) : tokens),
+  };
+}
+const parsed = headingBlocks(markdown.parse(source, {}), "h2");
+const introductionHtml = render(parsed.introduction);
+const sections = parsed.blocks.map((block) => {
+  const id = headingId(block.title);
+  const grouped = headingBlocks(block.tokens, "h3");
+  const structured = id === "experience" || id === "education";
+  return {
+    id, title: block.title, structured,
+    html: render(structured ? grouped.introduction : block.tokens),
+    entries: structured ? grouped.blocks.map(entry) : [],
+  };
+});
+const navigation = sections.filter((section) => !/^find-|^contact/.test(section.id));
 ---
 <BaseLayout title="About" description={profile.bio} dossier about>
   <article class="about-page">
     <header class="page-header" data-reveal><p class="section-label">About &amp; experience</p><h1>About</h1></header>
-    <div class="post-content about-content link-highlight-scope" set:html={html} />
-    <section class="methods-tools" aria-labelledby="methods-tools-heading" data-reveal>
-      <h2 id="methods-tools-heading">Methods &amp; tools</h2>
-      <ul class="methods-tools-list">{profile.skills.map((skill) => <li>{skill}</li>)}</ul>
-    </section>
+    <div class="post-content about-content about-introduction link-highlight-scope" set:html={introductionHtml} />
+    <nav class="about-section-nav" aria-label="About sections" data-reveal>
+      {navigation.map((section) => <a href={`#${section.id}`}>{section.id === "tools-and-languages" ? "Tools" : section.title}</a>)}
+    </nav>
+    <div class="about-sections">
+      {sections.map((section) => <section class:list={["about-section", { "about-tools": section.id === "tools-and-languages" }]} id={section.id} aria-labelledby={`${section.id}-heading`} tabindex="-1">
+        <h2 class="about-section-title" id={`${section.id}-heading`} data-reveal>{section.title}</h2>
+        {section.html && <div class="post-content about-content link-highlight-scope" set:html={section.html} />}
+        {section.entries.length > 0 && <div class="cv-entries">
+          {section.entries.map((item, index) => section.id === "experience" && index >= 2 ? <details class="cv-entry cv-entry-disclosure" data-reveal>
+            <summary><h3><span class="cv-entry-title">{item.title}</span>{item.metadata && <span class="cv-entry-meta" set:html={item.metadata} />}</h3></summary>
+            {item.html && <div class="post-content cv-entry-content link-highlight-scope" set:html={item.html} />}
+          </details> : <article class="cv-entry" data-reveal>
+            <header><h3 class="cv-entry-title">{item.title}</h3>{item.metadata && <p class="cv-entry-meta" set:html={item.metadata} />}</header>
+            {item.html && <div class="post-content cv-entry-content link-highlight-scope" set:html={item.html} />}
+          </article>)}
+        </div>}
+      </section>)}
+    </div>
   </article>
 </BaseLayout>
