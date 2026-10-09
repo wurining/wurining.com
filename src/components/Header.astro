@@ -1,6 +1,7 @@
 ---
 import { site } from "../lib/site";
 import ThemeToggle from "./ThemeToggle";
+import { externalLinkAttributes } from "../lib/links";
 interface Props { dossier?: boolean; }
 const { dossier = false } = Astro.props;
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
@@ -12,7 +13,8 @@ const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
       {site.menu.map((item) => {
         const active = item.url === "/" ? pathname === "/" || pathname.startsWith("/publications") : pathname === item.url.replace(/\/$/, "");
         const search = item.url === "/search/";
-        return <li><a href={item.url} aria-current={active ? "page" : undefined} title={search ? "Search (Alt + /)" : undefined} accesskey={search ? "/" : undefined}><span class:list={{ active }}>{item.name}</span></a></li>;
+        const external = externalLinkAttributes(item.url);
+        return <li><a href={item.url} {...external} aria-current={active ? "page" : undefined} title={search ? "Search (Alt + /)" : undefined} accesskey={search ? "/" : undefined}><span class:list={{ active }}>{item.name}{external.target && <span aria-hidden="true"> ↗</span>}</span></a></li>;
       })}
     </ul>
     <div class="theme-control"><ThemeToggle client:load /></div>

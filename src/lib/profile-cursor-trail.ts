@@ -27,8 +27,15 @@ export function mountProfileCursorTrail(element: HTMLElement): () => void {
       }
     }
     element.style.setProperty('--profile-trail-bottom-fade', `${config.bottomFadePx}px`);
-    element.style.setProperty('--profile-trail-mask', config.bottomFadePx > 0
-      ? 'linear-gradient(to bottom, #000 calc(100% - var(--profile-trail-bottom-fade)), transparent 100%)' : 'none');
+    element.style.setProperty('--profile-trail-left-fade', `${config.leftFadePx}px`);
+    element.style.setProperty('--profile-trail-top-fade', `${config.topFadePx}px`);
+    element.style.setProperty('--profile-trail-right-fade', `${config.rightFadePx}px`);
+    const masks = [];
+    if (config.bottomFadePx > 0) masks.push('linear-gradient(to bottom, #000 calc(100% - var(--profile-trail-bottom-fade)), transparent 100%)');
+    if (config.leftFadePx > 0) masks.push('linear-gradient(to right, transparent 0, #000 var(--profile-trail-left-fade))');
+    if (config.topFadePx > 0) masks.push('linear-gradient(to bottom, transparent 0, #000 var(--profile-trail-top-fade))');
+    if (config.rightFadePx > 0) masks.push('linear-gradient(to right, #000 calc(100% - var(--profile-trail-right-fade)), transparent 100%)');
+    element.style.setProperty('--profile-trail-mask', masks.join(', ') || 'none');
   }
   function inView() {
     const rect = element.getBoundingClientRect();

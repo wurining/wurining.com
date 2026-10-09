@@ -93,7 +93,7 @@ a:hover { color: var(--accent); }
 .logo a { font-size: 24px; font-weight: 650; letter-spacing: -0.04em; }
 #menu { margin: 0; display: flex; gap: 32px; overflow: visible; }
 #menu li + li { margin: 0; }
-#menu a { font-size: 16px; color: var(--secondary); padding: 7px 0; position: relative; }
+#menu a { font-size: 16px; color: var(--secondary); padding: 7px 0; position: relative; white-space: nowrap; }
 #menu a::after {
   content: "";
   position: absolute;
@@ -129,11 +129,11 @@ button#theme-toggle:hover { color: var(--accent); background: var(--accent-soft)
 /* A narrow profile column and a generous research column mirror the selected design. */
 .dossier-shell { --profile-trail-gutter: max(48px, calc((100vw - 1320px) / 2)); --profile-trail-gap: 56px; width: calc(100% - 96px); max-width: 1320px; margin: 26px auto 0; display: grid; grid-template-columns: 276px minmax(0, 1fr); column-gap: 56px; }
 .profile-sidebar { position: relative; isolation: isolate; padding: 24px 32px 40px 0; border-right: 1px solid transparent; }
-.profile-photo { width: 144px; height: 144px; margin-bottom: 22px; border-radius: 6px; background: #ffffff; }
+.profile-photo { width: 144px; height: 144px; margin-bottom: 22px; border-radius: 6px; background: transparent; }
 .profile-name { display: block; font-size: 32px; font-weight: 650; letter-spacing: -0.045em; line-height: 1.2; color: var(--primary); }
 .profile-description { margin-top: 8px; }
 .profile-role { font-size: 18px; line-height: 1.45; }
-.profile-cursor-trail { position: absolute; top: -20px; left: calc(-1 * var(--profile-trail-gutter)); width: calc(100% + var(--profile-trail-gutter) + var(--profile-trail-gap)); height: calc(var(--profile-trail-height, 660px) + 40px); z-index: -1; pointer-events: none; overflow: hidden; contain: paint; -webkit-mask-image: var(--profile-trail-mask, none); mask-image: var(--profile-trail-mask, none); }
+.profile-cursor-trail { position: absolute; top: -20px; left: calc(-1 * var(--profile-trail-gutter)); width: calc(100% + var(--profile-trail-gutter) + var(--profile-trail-gap)); height: calc(var(--profile-trail-height, 660px) + 40px); z-index: -1; pointer-events: none; overflow: hidden; contain: paint; -webkit-mask-image: var(--profile-trail-mask, none); mask-image: var(--profile-trail-mask, none); -webkit-mask-composite: source-in; mask-composite: intersect; }
 .profile-cursor-trail-canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
 .profile-cursor-trail-ready .profile-cursor-trail-canvas { opacity: 1; }
 .profile-summary { margin-top: 26px; }
@@ -312,7 +312,7 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
   .dossier-shell { --profile-trail-gutter: 20px; --profile-trail-gap: 20px; width: calc(100% - 40px); margin-top: 15px; }
   .dossier-header { margin-bottom: 25px; }
   .nav { gap: 16px; min-height: 42px; padding-bottom: 12px; }
-  #menu { gap: 24px; }
+  #menu { gap: 12px 24px; flex-wrap: wrap; min-width: 0; }
   #menu a { font-size: 15px; }
   .dossier-header .nav { gap: 16px; }
   .header { padding: 18px 20px 0; }

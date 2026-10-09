@@ -2,7 +2,7 @@
 import Icon from "./Icon.astro";
 import Arrow from "./Arrow.astro";
 import { Image } from "astro:assets";
-import portrait from "../assets/profile.png";
+import portrait from "../assets/profile-transparent.png";
 import { profile } from "../lib/profile";
 import { externalLinkAttributes } from "../lib/links";
 import ProfileCursorTrail from "./ProfileCursorTrail.astro";
@@ -15,9 +15,9 @@ function iconName(label: string) {
 }
 ---
 <aside class="profile-sidebar" aria-label="Personal profile">
-  {home && <ProfileCursorTrail />}
+  <ProfileCursorTrail />
   <div class="profile-identity" data-reveal>
-    <Image class="profile-photo" src={portrait} alt={`Illustrated portrait of ${profile.name}`} width={144} height={144} densities={[1, 2]} format="webp" quality={85} loading="eager" decoding="async" />
+    <Image class="profile-photo" src={portrait} alt={`Illustrated portrait of ${profile.name}`} width={144} height={144} densities={[1, 2]} format="png" loading="eager" decoding="async" />
     {home ? <h1 class="profile-name">{profile.name}</h1> : <a class="profile-name" href="/">{profile.name}</a>}
   </div>
   <div class="profile-description">
@@ -33,7 +33,7 @@ function iconName(label: string) {
     </a>)}
     <a class="text-link profile-about-link" href="/about/">
       <svg class="profile-link-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z" /><path d="M14 3v6h6M8 13h8M8 17h5" /></svg>
-      <span>About &amp; experience</span><Arrow />
+      <span>About Me</span><Arrow />
     </a>
   </nav>
 </aside>

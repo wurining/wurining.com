@@ -13,6 +13,7 @@ export const site = {
     { name: 'Research', url: '/' },
     { name: 'About', url: '/about/' },
     { name: 'Search', url: '/search/' },
+    { name: 'Lab page', url: 'https://sites.google.com/site/jiankliu/home' },
   ],
   socialIcons: [
     { name: 'googlescholar', url: 'https://scholar.google.com/citations?user=wPAdqNwAAAAJ' },
