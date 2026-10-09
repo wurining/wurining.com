@@ -127,15 +127,19 @@ button#theme-toggle:hover { color: var(--accent); background: var(--accent-soft)
 .list .top-link { transform: none; }
 
 /* A narrow profile column and a generous research column mirror the selected design. */
-.dossier-shell { width: calc(100% - 96px); max-width: 1320px; margin: 26px auto 0; display: grid; grid-template-columns: 276px minmax(0, 1fr); column-gap: 56px; }
-.profile-sidebar { padding: 24px 32px 40px 0; border-right: 1px solid var(--border); }
+.dossier-shell { --profile-trail-gutter: max(48px, calc((100vw - 1320px) / 2)); --profile-trail-gap: 56px; width: calc(100% - 96px); max-width: 1320px; margin: 26px auto 0; display: grid; grid-template-columns: 276px minmax(0, 1fr); column-gap: 56px; }
+.profile-sidebar { position: relative; isolation: isolate; padding: 24px 32px 40px 0; border-right: 1px solid transparent; }
 .profile-photo { width: 144px; height: 144px; margin-bottom: 22px; border-radius: 6px; background: #ffffff; }
 .profile-name { display: block; font-size: 32px; font-weight: 650; letter-spacing: -0.045em; line-height: 1.2; color: var(--primary); }
-.profile-role { margin-top: 8px; font-size: 18px; line-height: 1.45; }
+.profile-description { margin-top: 8px; }
+.profile-role { font-size: 18px; line-height: 1.45; }
+.profile-cursor-trail { position: absolute; top: -20px; left: calc(-1 * var(--profile-trail-gutter)); width: calc(100% + var(--profile-trail-gutter) + var(--profile-trail-gap)); height: calc(var(--profile-trail-height, 660px) + 40px); z-index: -1; pointer-events: none; overflow: hidden; contain: paint; -webkit-mask-image: var(--profile-trail-mask, none); mask-image: var(--profile-trail-mask, none); }
+.profile-cursor-trail-canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+.profile-cursor-trail-ready .profile-cursor-trail-canvas { opacity: 1; }
 .profile-summary { margin-top: 26px; }
 .profile-bio { color: var(--content); font-size: 16px; line-height: 1.55; }
 .profile-bio + .profile-bio { margin-top: 8px; }
-.profile-links { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border); display: flex; flex-direction: column; align-items: flex-start; gap: 14px; font-size: 16px; }
+.profile-links { margin-top: 22px; padding-top: 18px; border-top: 1px solid transparent; display: flex; flex-direction: column; align-items: flex-start; gap: 14px; font-size: 16px; }
 .profile-link-icon, .action-icon { display: inline-flex; flex: 0 0 21px; width: 21px; height: 21px; align-items: center; justify-content: center; }
 .profile-link-icon svg, .action-icon svg { width: 21px; height: 21px; }
 .profile-about-link { margin-top: 4px; }
@@ -281,17 +285,20 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
 .link-highlight-trigger:focus-within .link-highlight { color: var(--link-highlight-color); background-color: var(--link-highlight-background); text-decoration-color: currentColor; }
 
 @media (max-width: 1150px) {
-  .dossier-shell { grid-template-columns: 240px minmax(0, 1fr); column-gap: 40px; }
+  .dossier-shell { --profile-trail-gap: 40px; grid-template-columns: 240px minmax(0, 1fr); column-gap: 40px; }
   .profile-sidebar { padding-right: 26px; }
   .research-headline { font-size: 35px; }
   .research-row { grid-template-columns: minmax(0, 1fr) minmax(140px, 0.65fr) 18px; gap: 18px; }
 }
 @media (max-width: 920px) {
-  .dossier-shell { width: calc(100% - 64px); display: flex; flex-direction: column; margin-top: 20px; }
+  .dossier-shell { --profile-trail-gutter: 32px; --profile-trail-gap: 32px; width: calc(100% - 64px); display: flex; flex-direction: column; margin-top: 20px; }
   .dossier-content { display: contents; }
   .dossier-header { order: -1; margin-bottom: 30px; }
   .profile-sidebar { border-right: 0; border-bottom: 1px solid var(--border); padding: 0 0 26px; display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); column-gap: 34px; }
   .profile-summary { margin-top: 0; }
+  .profile-description { margin-top: 0; }
+  .profile-description .profile-summary { margin-top: 26px; }
+  .profile-identity { padding-bottom: 34px; }
   .profile-links { grid-column: 1/-1; margin-top: 20px; padding-top: 0; border: 0; display: flex; flex-direction: row; flex-wrap: wrap; gap: 13px 23px; font-size: 14px; }
   .profile-about-link { margin: 0; }
   .profile-link-icon, .profile-link-icon svg { width: 18px; height: 18px; flex-basis: 18px; }
@@ -302,7 +309,7 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
 }
 @media (max-width: 600px) {
   body { font-size: 17px; }
-  .dossier-shell { width: calc(100% - 40px); margin-top: 15px; }
+  .dossier-shell { --profile-trail-gutter: 20px; --profile-trail-gap: 20px; width: calc(100% - 40px); margin-top: 15px; }
   .dossier-header { margin-bottom: 25px; }
   .nav { gap: 16px; min-height: 42px; padding-bottom: 12px; }
   #menu { gap: 24px; }
@@ -317,7 +324,9 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
   .profile-sidebar { display: block; padding-bottom: 25px; }
   .profile-photo { width: 108px; height: 108px; margin-bottom: 20px; }
   .profile-name { font-size: 30px; }
-  .profile-role { font-size: 17px; margin-top: 7px; }
+  .profile-identity { padding-bottom: 0; }
+  .profile-description { margin-top: 7px; }
+  .profile-role { font-size: 17px; }
   .profile-summary { margin-top: 26px; }
   .profile-bio { max-width: 41ch; }
   .profile-links { margin-top: 18px; gap: 12px 22px; }
@@ -365,4 +374,5 @@ a:hover .link-arrow, a:focus-visible .link-arrow { transform: translateX(3px); }
   html, :root { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   a:hover .link-arrow, a:focus-visible .link-arrow { transform: none; }
+  .profile-cursor-trail .profile-cursor-trail-canvas { opacity: 0; }
 }

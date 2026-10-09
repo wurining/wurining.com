@@ -1,0 +1,20 @@
+<div class="profile-cursor-trail" data-profile-cursor-trail data-trail-state="fallback" aria-hidden="true">
+  <canvas class="profile-cursor-trail-canvas"></canvas>
+</div>
+<script>
+  import { mountProfileCursorTrail } from "../lib/profile-cursor-trail";
+
+  let cleanups: (() => void)[] = [];
+  function mount() {
+    cleanups.forEach((cleanup) => cleanup());
+    cleanups = Array.from(document.querySelectorAll<HTMLElement>("[data-profile-cursor-trail]"), mountProfileCursorTrail);
+  }
+  mount();
+  window.addEventListener("pagehide", () => {
+    cleanups.forEach((cleanup) => cleanup());
+    cleanups = [];
+  });
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) mount();
+  });
+</script>

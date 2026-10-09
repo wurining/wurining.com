@@ -24,6 +24,7 @@
     "markdown-it": "15.0.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "shaders": "4.0.1",
     "tailwind-merge": "3.7.0",
     "yaml": "2.9.1"
   },

@@ -5,6 +5,7 @@ import { Image } from "astro:assets";
 import portrait from "../assets/profile.png";
 import { profile } from "../lib/profile";
 import { externalLinkAttributes } from "../lib/links";
+import ProfileCursorTrail from "./ProfileCursorTrail.astro";
 const home = Astro.url.pathname === "/";
 function iconName(label: string) {
   if (/scholar/i.test(label)) return "googlescholar";
@@ -14,13 +15,16 @@ function iconName(label: string) {
 }
 ---
 <aside class="profile-sidebar" aria-label="Personal profile">
+  {home && <ProfileCursorTrail />}
   <div class="profile-identity" data-reveal>
     <Image class="profile-photo" src={portrait} alt={`Illustrated portrait of ${profile.name}`} width={144} height={144} densities={[1, 2]} format="webp" quality={85} loading="eager" decoding="async" />
     {home ? <h1 class="profile-name">{profile.name}</h1> : <a class="profile-name" href="/">{profile.name}</a>}
-    <p class="profile-role">{profile.role}</p>
   </div>
-  <div class="profile-summary" data-reveal data-reveal-delay="70">
-    {profile.bioParagraphs.map((paragraph) => <p class="profile-bio">{paragraph}</p>)}
+  <div class="profile-description">
+    <p class="profile-role" data-reveal data-reveal-delay="40">{profile.role}</p>
+    <div class="profile-summary" data-reveal data-reveal-delay="70">
+      {profile.bioParagraphs.map((paragraph) => <p class="profile-bio">{paragraph}</p>)}
+    </div>
   </div>
   <nav class="profile-links" aria-label="Profile links" data-reveal data-reveal-delay="120">
     {profile.links.map((link) => <a class="text-link" href={link.href} {...externalLinkAttributes(link.href, "me noreferrer")}>
