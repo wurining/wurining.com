@@ -22,10 +22,10 @@ const linkedin = `https://www.linkedin.com/shareArticle?${new URLSearchParams({ 
     </header>
     {post.cover?.image && !post.cover.hiddenInSingle && <figure class="entry-cover"><img loading="eager" src={post.cover.image} alt={post.cover.alt} />{post.cover.captionHtml && <p set:html={post.cover.captionHtml} />}</figure>}
     {post.showToc && post.tocHtml && <div class="toc"><details><summary accesskey="c" title="(Alt + C)"><span class="details">Table of Contents</span></summary><div class="inner" set:html={post.tocHtml} /></details></div>}
-    <div class="post-content" set:html={post.html} />
+    <div class="post-content link-highlight-scope" set:html={post.html} />
     <footer class="post-footer">
       <ul class="post-tags">{post.tags.map((tag) => <li><a href={`/tags/${tagSlug(tag)}/`}>{tag}</a></li>)}</ul>
-      {(previous || next) && <nav class="paginav">{previous && <a class="prev" href={previous.url}><span class="title">« Prev</span><br /><span>{previous.title}</span></a>}{next && <a class="next" href={next.url}><span class="title">Next »</span><br /><span>{next.title}</span></a>}</nav>}
+      {(previous || next) && <nav class="paginav">{previous && <a class="prev link-highlight-trigger" href={previous.url}><span class="title">« Prev</span><br /><span class="link-highlight">{previous.title}</span></a>}{next && <a class="next link-highlight-trigger" href={next.url}><span class="title">Next »</span><br /><span class="link-highlight">{next.title}</span></a>}</nav>}
       {!post.disableShare && <ul class="share-buttons"><li><a target="_blank" rel="noopener noreferrer" aria-label={`share ${post.title} on x`} href={tweet}><Icon name="share-x" /></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label={`share ${post.title} on linkedin`} href={linkedin}><Icon name="share-linkedin" /></a></li></ul>}
     </footer>
   </article>

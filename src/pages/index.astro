@@ -1,16 +1,34 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import PostCard from "../components/PostCard.astro";
-import Icon from "../components/Icon.astro";
-import { site } from "../lib/site";
-import { getPublications } from "../lib/content";
-const posts = await getPublications();
+import ResearchFeature from "../components/ResearchFeature.astro";
+import Arrow from "../components/Arrow.astro";
+import { profile } from "../lib/profile";
 ---
-<BaseLayout rss="/index.xml">
-  <article class="first-entry home-info">
-    <header class="entry-header"><h1>{site.homeInfo.title}</h1></header>
-    <div class="entry-content" set:html={site.homeInfo.contentHtml} />
-    <footer class="entry-footer"><div class="social-icons">{site.socialIcons.map((icon) => <a href={icon.url} target="_blank" rel="noopener noreferrer me" title={icon.name.charAt(0).toUpperCase() + icon.name.slice(1)}><Icon name={icon.name} /></a>)}</div></footer>
-  </article>
-  {posts.map((post) => <PostCard post={post} />)}
+<BaseLayout rss="/index.xml" dossier>
+  <section class="selected-research" aria-labelledby="selected-research-heading">
+    <h2 class="section-label" id="selected-research-heading" data-reveal>Selected research</h2>
+    {profile.featuredResearch.map((research) => <ResearchFeature research={research} />)}
+  </section>
+  <section class="research-section" aria-labelledby="other-research-heading">
+    <h2 class="section-label" id="other-research-heading" data-reveal>Other research</h2>
+    <ul class="research-list">
+      {profile.otherResearch.map((research, index) => <li data-reveal data-reveal-delay={index * 55}>
+        <a class="research-row link-highlight-trigger" href={research.url} title={research.paperTitle}>
+          <span class="research-row-title"><span class="link-highlight">{research.title}</span></span>
+          <span class="research-row-meta">{research.venue} · {research.year}</span>
+          <Arrow />
+        </a>
+      </li>)}
+    </ul>
+    <a class="text-link research-index-link" href="/publications/" data-reveal>Browse publication notes <Arrow /></a>
+  </section>
+  {profile.highlights.length > 0 && <section class="research-section highlights-section" aria-labelledby="highlights-heading">
+    <h2 class="section-label" id="highlights-heading" data-reveal>Highlights</h2>
+    <ul class="highlights-list">
+      {profile.highlights.map((highlight, index) => <li data-reveal data-reveal-delay={index * 55}>
+        <span class="highlight-year">{highlight.year}</span>
+        <span class="highlight-text"><a class="text-link link-highlight" href={highlight.url}>{highlight.text}<Arrow /></a></span>
+      </li>)}
+    </ul>
+  </section>}
 </BaseLayout>

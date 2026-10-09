@@ -1,0 +1,55 @@
+<script>
+  // The HTML is visible without this script. Animation runs only when an
+  // element is in view; there is no hidden state waiting for JavaScript.
+  const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const seen = new WeakSet<Element>();
+  const animations = new Set<Animation>();
+  let observer: IntersectionObserver | undefined;
+  const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal], .page-header, .post-header, .post-entry, .archive-year, .terms-tags, .about-content > *"));
+
+  function reveal(element: HTMLElement) {
+    if (seen.has(element)) return;
+    seen.add(element);
+    if (preference.matches || typeof element.animate !== "function") return;
+    const animation = element.animate([
+      { opacity: 0, transform: "translateY(8px)" },
+      { opacity: 1, transform: "translateY(0)" },
+    ], {
+      duration: 780,
+      delay: Math.min(Number(element.dataset.revealDelay) || 0, 180),
+      easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+      fill: "backwards",
+    });
+    animations.add(animation);
+    animation.finished.then(() => animations.delete(animation), () => animations.delete(animation));
+  }
+
+  function configureMotion() {
+    observer?.disconnect();
+    if (preference.matches) {
+      animations.forEach((animation) => animation.cancel());
+      animations.clear();
+      return;
+    }
+    if (!("IntersectionObserver" in window)) return;
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        reveal(entry.target as HTMLElement);
+        observer?.unobserve(entry.target);
+      });
+    }, { threshold: 0.08 });
+    elements.forEach((element) => { if (!seen.has(element)) observer?.observe(element); });
+  }
+
+  configureMotion();
+  preference.addEventListener("change", configureMotion);
+  window.addEventListener("pagehide", () => {
+    observer?.disconnect();
+    animations.forEach((animation) => animation.cancel());
+    animations.clear();
+  });
+  window.addEventListener("pageshow", (event) => {
+    if (event.persisted) configureMotion();
+  });
+</script>

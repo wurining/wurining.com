@@ -4,6 +4,11 @@ import Fuse from "fuse.js";
 export interface SearchItem { title: string; permalink: string; summary: string; content: string; }
 interface Props { items: SearchItem[]; placeholder: string; }
 
+function resultHref(permalink: string) {
+  const url = new URL(permalink);
+  return `${url.pathname}${url.search}${url.hash}`;
+}
+
 export default function Search({ items, placeholder }: Props) {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(-1);
@@ -34,9 +39,9 @@ export default function Search({ items, placeholder }: Props) {
       <input ref={input} id="searchInput" autoFocus placeholder={placeholder} aria-label="search" type="search" autoComplete="off" maxLength={64} value={query}
         onChange={(event) => { setQuery(event.target.value); setActive(-1); }} onFocus={() => setActive(-1)} />
       <ul id="searchResults" aria-label="search results">
-        {results.map((item, index) => <li key={item.permalink} className={`post-entry${active === index ? " focus" : ""}`}>
-          <header className="entry-header">{item.title}&nbsp;»</header>
-          <a ref={(element) => { links.current[index] = element; }} href={item.permalink} aria-label={item.title} onFocus={() => setActive(index)} />
+        {results.map((item, index) => <li key={item.permalink} className={`post-entry link-highlight-trigger${active === index ? " focus" : ""}`}>
+          <header className="entry-header"><span className="link-highlight">{item.title}</span>&nbsp;»</header>
+          <a ref={(element) => { links.current[index] = element; }} href={resultHref(item.permalink)} aria-label={item.title} onFocus={() => setActive(index)} />
         </li>)}
       </ul>
     </div>

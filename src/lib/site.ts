@@ -1,8 +1,8 @@
 export const site = {
   url: 'https://wurining.com',
   origin: 'https://wurining.com',
-  title: '👨🏻‍💻Rn Wu',
-  description: 'Rining Wu, PhD Student, University of Leeds, AI, Developer, Brain Neuroscience, Computer Science, Machine Learning, Deep Learning, Artificial Intelligence',
+  title: 'Rining Wu',
+  description: 'Rining Wu is a PhD researcher working on machine learning, visual neuroscience, and scientific data analysis at the University of Leeds and the University of Birmingham.',
   keywords: ['Rining Wu', 'Rn Wu', 'Rining', 'Rn', 'Wu', 'University of Leeds', 'Leeds', 'AI', 'Developer', 'Brain Neuroscience', 'Computer Science', 'Machine Learning', 'Deep Learning', 'Artificial Intelligence'],
   author: 'Rining Wu',
   language: 'en-us',
@@ -10,10 +10,9 @@ export const site = {
   analyticsId: 'G-GY5HMKSQ35',
   clustrMaps: '//clustrmaps.com/globe.js?d=O8dorfO8mCbPJwLl2FzAM_T8svaHwG8E7IctspbAYGg',
   menu: [
-    { name: 'Archive', url: '/archives/' },
-    { name: 'Tags', url: '/tags/' },
+    { name: 'Research', url: '/' },
+    { name: 'About', url: '/about/' },
     { name: 'Search', url: '/search/' },
-    { name: 'Lab Page', url: 'https://sites.google.com/site/jiankliu/home' },
   ],
   socialIcons: [
     { name: 'googlescholar', url: 'https://scholar.google.com/citations?user=wPAdqNwAAAAJ' },

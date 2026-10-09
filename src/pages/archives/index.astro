@@ -19,8 +19,8 @@ const monthName = (date: Date) => new Intl.DateTimeFormat("en-US", { month: "lon
         const monthPosts = yearPosts.filter((post) => post.date.getUTCMonth() === month);
         return <div class="archive-month">
           <h3 class="archive-month-header">{monthName(monthPosts[0].date)}<sup class="archive-count">&nbsp;&nbsp;{monthPosts.length}</sup></h3>
-          <div class="archive-posts">{monthPosts.map((post) => <div class="archive-entry">
-            <h3 class="archive-entry-title entry-hint-parent">{post.title}</h3>
+          <div class="archive-posts">{monthPosts.map((post) => <div class="archive-entry link-highlight-trigger">
+            <h3 class="archive-entry-title"><span class="link-highlight">{post.title}</span></h3>
             <div class="archive-meta"><PostMeta post={post} /></div>
             <a class="entry-link" aria-label={`post link to ${post.title}`} href={post.url}></a>
           </div>)}</div>

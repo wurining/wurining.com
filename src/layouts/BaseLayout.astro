@@ -1,21 +1,26 @@
 ---
 import "../styles/papermod.css";
+import "../styles/research.css";
 import { site } from "../lib/site";
+import { profile } from "../lib/profile";
 import type { Post } from "../lib/content";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-interface Props { title?: string; description?: string; list?: boolean; post?: Post; rss?: string; contentPage?: boolean; section?: boolean; socialDescription?: string; canonicalPath?: string; }
-const { title, description = site.description, list = true, post, rss, contentPage = false, section = false, socialDescription = description, canonicalPath = Astro.url.pathname } = Astro.props;
+import ProfileSidebar from "../components/ProfileSidebar.astro";
+import Motion from "../components/Motion.astro";
+interface Props { title?: string; description?: string; list?: boolean; post?: Post; rss?: string; contentPage?: boolean; section?: boolean; socialDescription?: string; canonicalPath?: string; dossier?: boolean; about?: boolean; }
+const { title, description = site.description, list = true, post, rss, contentPage = false, section = false, socialDescription = description, canonicalPath = Astro.url.pathname, dossier = false, about = false } = Astro.props;
 const canonical = new URL(canonicalPath, site.url).href;
-const fullTitle = title ? `${title} | ${site.title}` : site.title;
+const fullTitle = title ? `${title} | ${site.title}` : `${site.title} — Research`;
 const home = Astro.url.pathname === "/";
 const author = post?.authors?.join(", ") ?? site.author;
-const breadcrumbs = post ? [{ name: "Publications", url: "/publications/" }, { name: post.title, url: post.url }] : [{ name: title ?? site.title, url: Astro.url.pathname }];
-const schemas: Record<string, unknown>[] = home ? [{
-  "@context": "https://schema.org", "@type": "Organization", name: site.title, url: new URL("/", site.url).href,
-  description: site.description.slice(0, 180), thumbnailUrl: new URL("favicon.png", site.url).href,
-  sameAs: site.socialIcons.map((icon) => icon.url),
-}] : post || contentPage || section ? [{
+const person = {
+  "@context": "https://schema.org", "@type": "Person", "@id": `${site.url}/#person`,
+  name: profile.name, url: new URL("/", site.url).href, jobTitle: profile.role,
+  description: profile.bio, sameAs: profile.links.map((link) => link.href),
+};
+const breadcrumbs = post ? [{ name: "Publications", url: "/publications/" }, { name: post.title, url: post.url }] : [{ name: title ?? site.title, url: canonicalPath }];
+const schemas: Record<string, unknown>[] = home ? [person] : post || contentPage || section || about ? [{
   "@context": "https://schema.org", "@type": "BreadcrumbList",
   itemListElement: breadcrumbs.map((item, index) => ({ "@type": "ListItem", position: index + 1, name: item.name, item: new URL(item.url, site.url).href })),
 }] : [];
@@ -25,46 +30,78 @@ if (post) schemas.push({
   wordCount: String(post.wordCount), inLanguage: "en", datePublished: post.date.toISOString(), dateModified: post.date.toISOString(),
   author: (post.authors ?? [site.author]).map((name) => ({ "@type": "Person", name })),
   mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-  publisher: { "@type": "Organization", name: site.title, logo: { "@type": "ImageObject", url: new URL("favicon.png", site.url).href } },
+  publisher: { "@type": "Person", "@id": person["@id"], name: site.author },
 });
 if (contentPage) schemas.push({
-  "@context": "https://schema.org", "@type": "BlogPosting", headline: title, name: title,
-  description: socialDescription, keywords: [], articleBody: "", wordCount: "0", inLanguage: "en",
-  datePublished: "0001-01-01T00:00:00Z", dateModified: "0001-01-01T00:00:00Z",
-  author: { "@type": "Person", name: site.author }, mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-  publisher: { "@type": "Organization", name: site.title, logo: { "@type": "ImageObject", url: new URL("favicon.png", site.url).href } },
+  "@context": "https://schema.org", "@type": "WebPage", name: title,
+  description: socialDescription || description, inLanguage: "en", url: canonical,
+  author: { "@type": "Person", "@id": person["@id"], name: site.author },
+});
+if (about) schemas.push(person, {
+  "@context": "https://schema.org", "@type": "AboutPage", name: title,
+  description, inLanguage: "en", url: canonical, mainEntity: { "@id": person["@id"] },
 });
 ---
 <!doctype html>
-<html lang="en" dir="auto">
+<html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="index, follow" /><title>{fullTitle}</title>
     <meta name="keywords" content={(post?.tags ?? (home ? site.keywords : [])).join(",")} />
     <meta name="description" content={description} /><meta name="author" content={author} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.png" /><link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" /><link rel="apple-touch-icon" href="/favicon.png" />
-    <link rel="mask-icon" href="/favicon.png" /><meta name="theme-color" content="#2e2e33" /><meta name="msapplication-TileColor" content="#2e2e33" />
+    <meta name="theme-color" content="#ffffff" /><meta name="msapplication-TileColor" content="#ffffff" />
     {rss && <link rel="alternate" type="application/rss+xml" href={new URL(rss, site.url).href} />}
     {home && <link rel="alternate" type="application/json" href={new URL("index.json", site.url).href} />}
     <link rel="alternate" hreflang="en" href={canonical} />
     <meta property="og:title" content={title ?? site.title} /><meta property="og:description" content={socialDescription} />
-    <meta property="og:type" content={post || contentPage ? "article" : "website"} /><meta property="og:url" content={canonical} /><meta property="og:site_name" content={site.title} />
+    <meta property="og:type" content={post ? "article" : "website"} /><meta property="og:url" content={canonical} /><meta property="og:site_name" content={site.title} />
     {post && <><meta property="article:section" content="publications" /><meta property="article:published_time" content={post.date.toISOString()} /><meta property="article:modified_time" content={post.date.toISOString()} /></>}
-    {contentPage && <meta property="article:section" content="" />}
     <meta name="twitter:card" content="summary" /><meta name="twitter:title" content={title ?? site.title} /><meta name="twitter:description" content={socialDescription} />
     {schemas.map((schema) => <script is:inline type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, "\\u003c")} />)}
-    <noscript><style is:inline>#theme-toggle,.top-link{display:none}@media(prefers-color-scheme:dark){:root{--theme:rgb(29,30,32);--entry:rgb(46,46,51);--primary:rgb(218,218,219);--secondary:rgb(155,156,157);--tertiary:rgb(65,66,68);--content:rgb(196,196,197);--code-block-bg:rgb(46,46,51);--code-bg:rgb(55,56,62);--border:rgb(51,51,51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript>
-    {site.googleAnalytics && <><script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${site.googleAnalytics}`} /><script is:inline define:vars={{ analyticsId: site.googleAnalytics }}>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config',analyticsId);</script></>}
+    <noscript><style is:inline>#theme-toggle,.top-link{display:none}</style></noscript>
+    {import.meta.env.PROD && <script is:inline data-analytics-id={site.googleAnalytics} data-map-url={site.clustrMaps}>
+      // Local builds and previews never contact the production analytics services.
+      if (["wurining.com", "www.wurining.com"].includes(location.hostname)) {
+        const analyticsId = document.currentScript?.getAttribute("data-analytics-id");
+        const mapUrl = document.currentScript?.getAttribute("data-map-url");
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ window.dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", analyticsId);
+        const analytics = document.createElement("script");
+        analytics.async = true;
+        analytics.src = `https://www.googletagmanager.com/gtag/js?id=${analyticsId}`;
+        document.head.append(analytics);
+        window.addEventListener("load", () => {
+          const holder = document.getElementById("visitor-map");
+          if (!holder || !mapUrl) return;
+          const map = document.createElement("script");
+          map.id = "clstr_globe";
+          map.async = true;
+          map.src = mapUrl;
+          holder.append(map);
+        }, { once: true });
+      }
+    </script>}
   </head>
-  <body class:list={{ list }} id="top">
-    <script is:inline>try{const preference=localStorage.getItem('pref-theme');if(preference==='dark'||(preference!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.body.classList.add('dark')}catch{if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.body.classList.add('dark')}</script>
-    <Header /><main class="main"><slot /></main><Footer />
-    <script is:inline>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true}};</script>
-    <script is:inline src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js" integrity="sha256-kbAFUDxdHwlYv01zraGjvjNZayxKtdoiJ38bDTFJtaQ=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/css/pseudocode.min.css" /><script is:inline src="/js/pseudocode.min.js"></script>
-    <script is:inline>document.querySelectorAll('pre.pseudocode').forEach(el=>{if(window.pseudocode)window.pseudocode.renderElement(el,{indentSize:'1.2em',commentDelimiter:'//',lineNumber:true,lineNumberPunc:':',noEnd:false,captionCount:undefined})});</script>
+  <body class:list={{ list, "dossier-page": dossier }} id="top" tabindex="-1">
+    <script is:inline>try{if(localStorage.getItem('pref-theme')==='dark'){document.body.classList.add('dark');document.querySelector('meta[name="theme-color"]').setAttribute('content','#16191d')}}catch{}</script>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    {dossier ? <div class="dossier-shell">
+      <ProfileSidebar />
+      <div class="dossier-content"><Header dossier /><main class="main" id="main-content" tabindex="-1"><slot /></main></div>
+    </div> : <><Header /><main class="main" id="main-content" tabindex="-1"><slot /></main></>}
+    <Footer />
+    <Motion />
+    {post && <>
+      <script is:inline>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true}};</script>
+      <script is:inline src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js" integrity="sha256-kbAFUDxdHwlYv01zraGjvjNZayxKtdoiJ38bDTFJtaQ=" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="/css/pseudocode.min.css" /><script is:inline src="/js/pseudocode.min.js"></script>
+      <script is:inline>document.querySelectorAll('pre.pseudocode').forEach(el=>{if(window.pseudocode)window.pseudocode.renderElement(el,{indentSize:'1.2em',commentDelimiter:'//',lineNumber:true,lineNumberPunc:':',noEnd:false,captionCount:undefined})});</script>
+    </>}
   </body>
 </html>

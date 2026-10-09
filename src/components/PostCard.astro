@@ -4,9 +4,9 @@ import PostMeta from "./PostMeta.astro";
 interface Props { post: Post; tag?: boolean; }
 const { post, tag = false } = Astro.props;
 ---
-<article class:list={["post-entry", { "tag-entry": tag }]}>
+<article class:list={["post-entry", "link-highlight-trigger", { "tag-entry": tag }]}>
   {post.cover?.image && !post.cover.hiddenInList && <figure class="entry-cover"><img loading="lazy" src={post.cover.image} alt={post.cover.alt} /></figure>}
-  <header class="entry-header"><h2 class="entry-hint-parent">{post.title}</h2></header>
+  <header class="entry-header"><h2><span class="link-highlight">{post.title}</span></h2></header>
   <div class="entry-content"><p>{post.summary}</p></div>
   <footer class="entry-footer"><PostMeta post={post} /></footer>
   <a class="entry-link" aria-label={`post link to ${post.title}`} href={post.url}></a>

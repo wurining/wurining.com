@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MarkdownIt from "markdown-it";
+import source from "../content/about.md?raw";
+import { profile } from "../lib/profile";
+const html = new MarkdownIt({ html: false, linkify: true }).render(source);
+---
+<BaseLayout title="About" description={profile.bio} dossier about>
+  <article class="about-page">
+    <header class="page-header" data-reveal><p class="section-label">About &amp; experience</p><h1>About</h1></header>
+    <div class="post-content about-content link-highlight-scope" set:html={html} />
+    <section class="methods-tools" aria-labelledby="methods-tools-heading" data-reveal>
+      <h2 id="methods-tools-heading">Methods &amp; tools</h2>
+      <ul class="methods-tools-list">{profile.skills.map((skill) => <li>{skill}</li>)}</ul>
+    </section>
+  </article>
+</BaseLayout>

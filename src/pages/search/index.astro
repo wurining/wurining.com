@@ -10,4 +10,5 @@ const items = posts.map((post) => ({ title: post.title, permalink: new URL(post.
 <BaseLayout title={page?.title ?? "Search"} description={page?.description ?? `${page?.title ?? "Search"} - ${site.title}`} contentPage socialDescription={page?.description ?? ""}>
   <header class="page-header"><h1>{page?.title ?? "Search"}&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg></h1>{page?.description && <div class="post-description">{page.description}</div>}<div class="post-meta"></div></header>
   <Search items={items} placeholder={page?.placeholder ?? "Type to search..."} client:load />
+  <noscript><p class="search-fallback">Search needs JavaScript. You can browse these publication notes:</p><ul class="search-fallback-list">{posts.map((post) => <li><a class="link-highlight" href={post.url}>{post.title}</a></li>)}</ul></noscript>
 </BaseLayout>
