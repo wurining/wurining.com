@@ -8,8 +8,8 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import ProfileSidebar from "../components/ProfileSidebar.astro";
 import Motion from "../components/Motion.astro";
-interface Props { title?: string; description?: string; list?: boolean; post?: Post; rss?: string; contentPage?: boolean; section?: boolean; socialDescription?: string; canonicalPath?: string; dossier?: boolean; about?: boolean; }
-const { title, description = site.description, list = true, post, rss, contentPage = false, section = false, socialDescription = description, canonicalPath = Astro.url.pathname, dossier = false, about = false } = Astro.props;
+interface Props { title?: string; description?: string; list?: boolean; post?: Post; rss?: string; contentPage?: boolean; section?: boolean; socialDescription?: string; canonicalPath?: string; dossier?: boolean; about?: boolean; postFormatting?: boolean; }
+const { title, description = site.description, list = true, post, rss, contentPage = false, section = false, socialDescription = description, canonicalPath = Astro.url.pathname, dossier = false, about = false, postFormatting = true } = Astro.props;
 const canonical = new URL(canonicalPath, site.url).href;
 const fullTitle = title ? `${title} | ${site.title}` : `${site.title} — Research`;
 const home = Astro.url.pathname === "/";
@@ -61,6 +61,7 @@ if (about) schemas.push(person, {
     <meta property="og:type" content={post ? "article" : "website"} /><meta property="og:url" content={canonical} /><meta property="og:site_name" content={site.title} />
     {post && <><meta property="article:section" content="publications" /><meta property="article:published_time" content={post.date.toISOString()} /><meta property="article:modified_time" content={post.date.toISOString()} /></>}
     <meta name="twitter:card" content="summary" /><meta name="twitter:title" content={title ?? site.title} /><meta name="twitter:description" content={socialDescription} />
+    <slot name="head" />
     {schemas.map((schema) => <script is:inline type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, "\\u003c")} />)}
     <noscript><style is:inline>#theme-toggle,.top-link{display:none}</style></noscript>
     {import.meta.env.PROD && <script is:inline data-analytics-id={site.googleAnalytics} data-map-url={site.clustrMaps}>
@@ -92,12 +93,12 @@ if (about) schemas.push(person, {
     <script is:inline>try{if(localStorage.getItem('pref-theme')==='dark'){document.body.classList.add('dark');document.querySelector('meta[name="theme-color"]').setAttribute('content','#16191d')}}catch{}</script>
     <a class="skip-link" href="#main-content">Skip to content</a>
     {dossier ? <div class="dossier-shell">
-      <ProfileSidebar />
+      <slot name="sidebar"><ProfileSidebar /></slot>
       <div class="dossier-content"><Header dossier /><main class="main" id="main-content" tabindex="-1"><slot /></main></div>
     </div> : <><Header /><main class="main" id="main-content" tabindex="-1"><slot /></main></>}
     <Footer />
     <Motion />
-    {post && <>
+    {post && postFormatting && <>
       <script is:inline>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true}};</script>
       <script is:inline src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js" integrity="sha256-kbAFUDxdHwlYv01zraGjvjNZayxKtdoiJ38bDTFJtaQ=" crossorigin="anonymous"></script>
       <link rel="stylesheet" href="/css/pseudocode.min.css" /><script is:inline src="/js/pseudocode.min.js"></script>

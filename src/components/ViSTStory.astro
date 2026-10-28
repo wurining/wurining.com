@@ -1,0 +1,182 @@
+---
+import ablationData from "../data/ablation.json";
+interface Props {
+  /** Path relative to the publication URL, including the trailing slash. */
+  assetBase?: string;
+}
+const { assetBase = "./vist/" } = Astro.props;
+const cellGroups = [
+  { id: "good", label: "Good CC", cells: [77, 44, 37, 81] },
+  { id: "middle", label: "Middle CC", cells: [27, 78, 68, 61] },
+  { id: "worst", label: "Worst CC", cells: [86, 87, 31, 84] },
+];
+const ablationMin = Math.min(...ablationData.cases.map((item) => item.cc));
+const ablationMax = Math.max(...ablationData.cases.map((item) => item.cc));
+const ablationColor = (cc: number) => {
+  const fraction = Math.max(0, Math.min(1, (cc - ablationMin) / (ablationMax - ablationMin)));
+  const low = [211, 77, 85], middle = [218, 163, 72], high = [8, 127, 140];
+  const from = fraction <= 0.5 ? low : middle;
+  const to = fraction <= 0.5 ? middle : high;
+  const mix = fraction <= 0.5 ? fraction * 2 : (fraction - 0.5) * 2;
+  return `rgb(${from.map((channel, index) => Math.round(channel + (to[index] - channel) * mix)).join(", ")})`;
+};
+// Springer cites the proceedings volume as 2025; the conference was ECCV 2024.
+const bibtex = `@inproceedings{Wu2025ViST,
+  title     = {Aligning Neuronal Coding of Dynamic Visual Scenes with Foundation Vision Models},
+  author    = {Wu, Rining and Zhou, Feixiang and Yin, Ziwei and Liu, Jian K.},
+  booktitle = {Computer Vision -- ECCV 2024},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {15146},
+  pages     = {238--254},
+  year      = {2025},
+  publisher = {Springer Nature Switzerland},
+  doi       = {10.1007/978-3-031-73223-2_14}
+}`;
+---
+<div class="vist-page" data-vist-root data-asset-base={assetBase}>
+  <div class="vist-main">
+    <section class="vist-hero" id="vist-top" aria-labelledby="vist-title">
+      <div class="vist-hero-copy">
+        <p class="vist-kicker">ECCV 2024 <b> / </b> VISUAL NEURAL CODING</p>
+        <h1 id="vist-title">Aligning neuronal coding of dynamic visual scenes with foundation vision models</h1>
+        <p class="vist-hero-description">Vi-ST predicts how retinal ganglion cells respond to natural video, and tests whether those predictions transfer to a different scene.</p>
+        <p class="vist-authors">Rining Wu · Feixiang Zhou · Ziwei Yin · Jian K. Liu</p>
+        <div class="vist-hero-actions"><a class="vist-text-link" href="#vist-explore">Explore the response <span aria-hidden="true">↓</span></a><a class="vist-quiet-link" href="https://arxiv.org/abs/2407.10737" target="_blank" rel="noopener noreferrer">Read the paper <span aria-hidden="true">↗</span></a></div>
+      </div>
+
+      <div class="vist-observation" id="vist-explore">
+        <div class="vist-observation-heading">
+          <div><p class="vist-overline" data-vist-direction-label>TRAIN MOVIE 1 → TEST MOVIE 2</p><h2>Dynamic natural scene stimuli and RGC responses</h2></div>
+          <div class="vist-direction-buttons vist-example-direction" role="group" aria-label="Training and test movie for the example"><button type="button" data-vist-direction="movie2" aria-pressed="true">Movie 1 <span>→</span> Movie 2</button><button type="button" data-vist-direction="movie1" aria-pressed="false">Movie 2 <span>→</span> Movie 1</button></div>
+        </div>
+        <div class="vist-observation-grid">
+          <div class="vist-stimulus-panel">
+            <div class="vist-panel-label"><span>01 / NATURAL SCENE</span><span data-vist-movie-label>MOVIE 2</span></div>
+            <div class="vist-video-wrap">
+              <video data-vist-video src={`${assetBase}movie2.mp4`} poster={`${assetBase}movie2-poster.jpg`} muted playsinline preload="metadata" controls aria-label="Natural scene stimulus video"></video>
+              <canvas class="vist-rf-overlay" data-vist-rf width="90" height="90" aria-hidden="true"></canvas>
+              <span class="vist-video-time" data-vist-time>00:00.0</span>
+            </div>
+            <p class="vist-panel-caption"><span class="vist-live-dot"></span> VISUAL STIMULUS <span>360 × 360 PX · 30 FPS</span></p>
+            <div class="vist-rf-control"><button type="button" data-vist-rf-toggle aria-pressed="true"><span aria-hidden="true"></span> Receptive field: on</button><a href="#vist-provenance">How it is estimated</a></div>
+          </div>
+          <div class="vist-signal-panel">
+            <div class="vist-panel-label"><span>02 / RETINAL RESPONSE</span><span data-vist-frame>FRAME 000 / 799</span></div>
+            <div class="vist-signal-top">
+              <div><p class="vist-small-label">RESPONSE OF</p><div class="vist-select-label"><span>RGC</span><div class="vist-cell-picker" data-vist-picker>
+                <button class="vist-cell-trigger" data-vist-cell-trigger type="button" aria-label="Choose retinal ganglion cell, currently RGC 77" aria-haspopup="listbox" aria-expanded="false" aria-controls="vist-cell-list"><span data-vist-cell-current>77</span><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m3.5 6 4.5 4.5L12.5 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+                <div class="vist-cell-dropdown" data-vist-cell-dropdown hidden>
+                  <div class="vist-cell-menu-head"><span>SELECT A CELL</span><span>EXAMPLE CC</span></div>
+                  <div id="vist-cell-list" role="listbox" aria-label="Retinal ganglion cell examples" data-vist-cell-list>
+                    {cellGroups.map((group) => <div role="group" aria-labelledby={`vist-group-${group.id}`} class="vist-cell-group"><p id={`vist-group-${group.id}`} class="vist-cell-group-title">{group.label}</p><div class="vist-cell-options">{group.cells.map((cell) => <button type="button" role="option" tabindex="-1" aria-selected={cell === 77 ? "true" : "false"} data-vist-cell-option={String(cell)}><span>RGC {cell}</span><span data-vist-option-cc>—</span></button>)}</div></div>)}
+                  </div>
+                  <p class="vist-cell-menu-note">Groups follow the supplement. CC varies with the movie direction.</p>
+                </div>
+              </div></div></div>
+              <div class="vist-cell-score"><span>PAPER EXAMPLE CC</span><strong data-vist-cell-cc>0.5796</strong></div>
+            </div>
+            <div class="vist-chart-wrap">
+              <div class="vist-y-label">FIRING RATE <span>(spikes / sec)</span></div>
+              <svg class="vist-trace" data-vist-chart viewBox="0 0 720 220" role="img" aria-label="Measured and predicted firing rate over the example video segment">
+                <defs><clipPath id="vist-trace-reveal"><rect data-vist-reveal x="35" y="0" width="0" height="220"></rect></clipPath></defs>
+                <g class="vist-chart-grid"><line x1="35" y1="15" x2="720" y2="15"></line><line x1="35" y1="110" x2="720" y2="110"></line><line x1="35" y1="205" x2="720" y2="205"></line></g>
+                <g class="vist-chart-ticks"><text x="0" y="19" data-vist-ymax></text><text x="0" y="114" data-vist-ymid></text><text x="0" y="209" data-vist-ymin></text></g>
+                <path class="vist-trace-target vist-trace-ghost" data-vist-target-ghost d=""></path>
+                <path class="vist-trace-prediction vist-trace-ghost" data-vist-prediction-ghost d=""></path>
+                <g clip-path="url(#vist-trace-reveal)"><path class="vist-trace-target" data-vist-target d=""></path><path class="vist-trace-prediction" data-vist-prediction d=""></path></g>
+                <line class="vist-playhead" data-vist-playhead x1="35" y1="10" x2="35" y2="210"></line>
+                <circle class="vist-playhead-dot" data-vist-dot cx="35" cy="0" r="4"></circle>
+              </svg>
+              <div class="vist-x-label"><span>0 SEC</span><span data-vist-duration>26.7 SEC</span></div>
+            </div>
+            <div class="vist-legend"><span><i class="vist-legend-target"></i> Measured response</span><span><i class="vist-legend-prediction"></i> Vi-ST prediction</span></div>
+            <p class="vist-chart-note">Curves show a paper example. Predictions are recovered from the supplementary vector figure.</p>
+          </div>
+        </div>
+        <div class="vist-player-controls">
+          <button class="vist-play" data-vist-play type="button" aria-label="Pause video"><span data-vist-play-icon aria-hidden="true">Ⅱ</span></button>
+          <label class="vist-range-label" for="vist-timeline">Video timeline</label><input id="vist-timeline" data-vist-timeline type="range" min="0" max="799" value="0" step="1" aria-label="Video timeline, frame" />
+          <span class="vist-current-frame" data-vist-frame-compact>000 / 799</span>
+        </div>
+        <div class="vist-example-footer"><span>MEASURED ON SALAMANDER RETINA</span><a href="#vist-provenance">About this example <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </section>
+
+    <section class="vist-question" aria-labelledby="vist-question-title">
+      <div class="vist-section-inner vist-question-grid"><p class="vist-section-index">01 <span>/ THE QUESTION</span></p><div><h2 id="vist-question-title">Can a model generalize to a new scene?</h2><p>Retinal ganglion cells encode visual information as changing firing rates. A model can fit responses to a familiar movie, but transferring to a different movie tests whether it has learned features that remain useful across scenes.</p><p>We used recordings from 90 salamander retinal cells presented with two grayscale natural movies. Movie 1 has slower changes and features swimming salamanders; Movie 2 contains more rapidly changing outdoor scenes with tigers and deer.</p></div></div>
+      <div class="vist-facts vist-section-inner" aria-label="Study at a glance"><div><strong>2</strong><span>VIDEOS · 60.0 &amp; 53.3 SEC</span></div><div><strong>90</strong><span>RETINAL GANGLION CELLS</span></div><div><strong>30<span> fps</span></strong><span>VIDEO AND RESPONSE RATE</span></div></div>
+    </section>
+
+    <section class="vist-results" id="vist-results" aria-labelledby="vist-results-title">
+      <div class="vist-section-inner">
+        <div class="vist-results-intro"><p class="vist-section-index">02 <span>/ THE COMPARISON</span></p><div><h2 id="vist-results-title">Predicting responses across movies</h2><p>The models are trained on one movie and evaluated on the other. Switch direction to compare the mean cell-wise Pearson correlation reported in Table 2.</p></div></div>
+        <div class="vist-comparison">
+          <div class="vist-comparison-top"><div><p class="vist-small-label">CROSS-MOVIE PREDICTION</p><h3>Does the model transfer?</h3></div><div class="vist-direction-buttons" role="group" aria-label="Training and test movie"><button type="button" data-vist-direction="movie2" aria-pressed="true">Movie 1 <span>→</span> Movie 2</button><button type="button" data-vist-direction="movie1" aria-pressed="false">Movie 2 <span>→</span> Movie 1</button></div></div>
+          <div class="vist-comparison-body"><div class="vist-comparison-copy"><p class="vist-small-label">MEAN CORRELATION · PAPER TABLE 2</p><strong data-vist-big-score>0.334</strong><p data-vist-score-direction>Train on Movie 1.<br />Test on Movie 2.</p><a href="#vist-explore" class="vist-text-link">See an example <span aria-hidden="true">↑</span></a></div>
+            <div class="vist-bars" aria-label="Mean correlation by model">
+              <div class="vist-bar-row vist-bar-highlight"><div><span>Vi-ST</span><strong data-vist-value="vist">0.334</strong></div><div class="vist-bar-track"><i data-vist-bar="vist" style="--width: 83.5%"></i></div></div>
+              <div class="vist-bar-row"><div><span>I3D + MSTCN</span><strong data-vist-value="i3d">0.108</strong></div><div class="vist-bar-track"><i data-vist-bar="i3d" style="--width: 27%"></i></div></div>
+              <div class="vist-bar-row"><div><span>DINOv2 + MSTCN</span><strong data-vist-value="dino">0.101</strong></div><div class="vist-bar-track"><i data-vist-bar="dino" style="--width: 25.25%"></i></div></div>
+              <div class="vist-bar-axis"><span>0</span><span>0.1</span><span>0.2</span><span>0.3</span><span>0.4</span></div>
+            </div>
+          </div>
+          <div class="vist-comparison-foot"><p>Mean Pearson correlation (CC) over retinal cells. Higher is better. Values are reported in the paper; the two directions are separate trained models.</p><a href="https://arxiv.org/pdf/2407.10737#page=11" target="_blank" rel="noopener noreferrer">View Table 2 <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <noscript><p class="vist-noscript">Movie 2 → Movie 1: Vi-ST 0.281; I3D + MSTCN 0.074; DINOv2 + MSTCN 0.100. Enable JavaScript for the interactive comparison.</p></noscript>
+        <div class="vist-result-detail"><h3>For context: within-movie results</h3><p>The same-movie evaluation uses an odd–even split: alternating frames of one movie form the training and test sets. These results use a different evaluation setting and serve as context for the cross-movie transfer task.</p><div class="vist-table-scroll"><table><thead><tr><th scope="col">Model</th><th scope="col">Movie 1 → 1</th><th scope="col">Movie 2 → 2</th></tr></thead><tbody><tr><th scope="row">CRNN <span>(80 cells)</span></th><td>0.857</td><td>0.718</td></tr><tr><th scope="row">I3D + MSTCN</th><td>0.846</td><td>0.668</td></tr><tr><th scope="row">DINOv2 + MSTCN</th><td>0.849</td><td>0.672</td></tr><tr><th scope="row">Vi-ST</th><td>0.789</td><td>0.570</td></tr></tbody></table></div><p class="vist-table-note">Mean correlation from Table 2. CRNN used 80 cells; the other models used 90. Same-movie and cross-movie scores have different test protocols.</p></div>
+      </div>
+    </section>
+
+    <section class="vist-method" id="vist-method" aria-labelledby="vist-method-title">
+      <div class="vist-section-inner vist-method-intro"><p class="vist-section-index">03 <span>/ THE METHOD</span></p><div><h2 id="vist-method-title">From video frames to neural activity</h2><p>Vi-ST combines a pretrained visual representation, information from earlier frames and measured receptive fields to predict the population response.</p></div></div>
+      <figure class="vist-model-figure"><a href={`${assetBase}model-architecture.webp`} target="_blank" rel="noopener noreferrer" aria-label="Open the paper's model architecture figure in a new tab"><img src={`${assetBase}model-architecture.webp`} alt="Vi-ST architecture from Figure 1: a frozen vision transformer and causal 3D temporal network extract video features, which are conditioned on receptive fields and passed through multi-scale blocks to predict neuronal responses." width="1700" height="1064" loading="lazy" /></a><figcaption><span>Figure 1 from the paper · Vi-ST architecture</span><a href={`${assetBase}model-architecture.webp`} target="_blank" rel="noopener noreferrer">Open figure <span aria-hidden="true">↗</span></a></figcaption></figure>
+      <div class="vist-section-inner vist-method-steps"><div><span>01 / VISUAL FEATURES</span><h3>Represent each frame</h3><p>A frozen DINOv2 ViT-L/14 with registers transforms each frame into a 16 × 16 visual feature map.</p></div><div><span>02 / TEMPORAL CONTEXT</span><h3>Combine earlier frames</h3><p>A causal 3D temporal convolutional network extracts spatiotemporal features, followed by four multi-scale blocks that use different temporal kernel sizes.</p></div><div><span>03 / CELL INFORMATION</span><h3>Condition on receptive fields</h3><p>Measured 90 × 90 receptive fields are downsampled to the feature grid and used to condition the network through 3D AdaLN Zero.</p></div></div>
+      <div class="vist-section-inner vist-method-extra"><div><h3>Training and time scales</h3><p>The four multi-scale blocks use temporal kernels of (1, 25), (1, 13, 21), (1, 7, 9) and (1, 3, 5) frames. Training uses 128-frame windows; the loss combines root mean squared error, a penalty for negative predictions and SoftDTW terms over 6- and 12-frame windows.</p></div><div><h3>Reading the metrics</h3><p>Pearson correlation (CC) describes agreement over the response sequence. The paper also proposes SD-KL, which compares distributions of response durations; the two metrics describe different aspects of a prediction.</p></div></div>
+    </section>
+
+    <section class="vist-ablation" id="vist-ablation" aria-labelledby="vist-ablation-title">
+      <div class="vist-ablation-intro"><p class="vist-section-index">04 <span>/ ABLATION STUDY</span></p><h2 id="vist-ablation-title">What does each component contribute?</h2><p>Select an ablation experiment to explore how a change to the model affects its response predictions.</p></div>
+      <div class="vist-ablation-layout" data-vist-ablation>
+        <div class="vist-ablation-chart"><div class="vist-ablation-chart-heading"><h3>Compare the variants</h3><span>PEARSON CC · HIGHER IS BETTER</span></div>
+          <div class="vist-ablation-rows" role="group" aria-label="Ablation experiments">
+            {ablationData.cases.map((item) => <button type="button" class="vist-ablation-row" style={`--ablation-color: ${ablationColor(item.cc)}`} data-vist-ablation-case={item.id} data-cc={item.cc} data-scope={item.scope} data-change={item.change} data-mask-label={item.maskLabel} data-description={item.description} data-label={item.label} aria-pressed={item.id === "baseline" ? "true" : "false"}>
+              <span class="vist-ablation-row-label">{item.label}</span><span class="vist-ablation-track" aria-hidden="true"><i style={`--ablation-width: ${(item.cc / 0.4 * 100).toFixed(3)}%`}></i></span><span class="vist-ablation-row-score">≈{item.cc.toFixed(4)}</span>
+            </button>)}
+          </div>
+          <div class="vist-ablation-axis" aria-hidden="true"><span></span><div><span>0</span><span>0.1</span><span>0.2</span><span>0.3</span><span>0.4</span></div><span></span></div>
+          <div class="vist-ablation-colorbar" aria-label={`Color indicates performance: red for lower CC, green for higher CC, from approximately ${ablationMin.toFixed(4)} to ${ablationMax.toFixed(4)}.`}><div><span>LOWER CC</span><span>HIGHER CC</span></div><div class="vist-ablation-color-gradient" aria-hidden="true"></div><div><span>≈{ablationMin.toFixed(4)}</span><span>≈{ablationMax.toFixed(4)}</span></div></div>
+        </div>
+        <div class="vist-ablation-inspector" data-vist-ablation-inspector>
+          <p class="vist-small-label">MODEL ARCHITECTURE · SELECTED EXPERIMENT</p>
+          <div class="vist-ablation-figure"><img src={`${assetBase}model-architecture.webp`} alt="Vi-ST architecture showing the video feature extractor, receptive-field conditioning and spikes alignment." width="1700" height="1064" loading="lazy" />
+            <svg class="vist-ablation-overlay" viewBox="0 0 1700 1064" aria-hidden="true" focusable="false">
+              <g data-ablation-region="prior"><rect x="610" y="58" width="282" height="375" rx="14"></rect><text x="751" y="245" text-anchor="middle" data-ablation-mask-label></text><rect class="vist-prior-trainable" x="528" y="85" width="68" height="313" rx="3"></rect><text class="vist-prior-trainable-label" x="562" y="421" text-anchor="middle">Trainable</text></g>
+              <g data-ablation-region="temporal"><rect x="985" y="58" width="670" height="375" rx="14"></rect><text x="1320" y="245" text-anchor="middle" data-ablation-mask-label></text></g>
+              <g data-ablation-region="rf"><rect x="5" y="532" width="400" height="389" rx="14"></rect><text x="205" y="726" text-anchor="middle" data-ablation-mask-label></text></g>
+              <g data-ablation-region="rf-stack"><rect class="vist-rf-outline" x="5" y="532" width="400" height="389" rx="14"></rect><g transform="translate(230 550)"><rect class="vist-stack-card" x="20" y="0" width="100" height="100" rx="4"></rect><rect class="vist-stack-card" x="10" y="10" width="100" height="100" rx="4"></rect><rect class="vist-stack-card" x="0" y="20" width="100" height="100" rx="4"></rect><path class="vist-stack-grid" d="M25 20 V120 M50 20 V120 M75 20 V120 M0 45 H100 M0 70 H100 M0 95 H100"></path></g><text class="vist-stack-label" x="290" y="710" text-anchor="middle" data-ablation-mask-label></text></g>
+              <g data-ablation-region="multiscale"><rect x="735" y="598" width="565" height="380" rx="14"></rect><text x="1018" y="790" text-anchor="middle" data-ablation-mask-label></text></g>
+              <g data-ablation-region="extractor"><rect x="425" y="5" width="1235" height="480" rx="14"></rect><text x="1042" y="250" text-anchor="middle" data-ablation-mask-label></text></g>
+              <g data-ablation-region="alignment"><rect class="vist-alignment-label-cover" x="1040" y="995" width="375" height="65"></rect><rect x="550" y="570" width="875" height="490" rx="14"></rect><text x="988" y="800" text-anchor="middle" data-ablation-mask-label></text></g>
+            </svg>
+          </div>
+          <div class="vist-ablation-detail" aria-live="polite"><p class="vist-small-label">SELECTED EXPERIMENT</p><h3 data-vist-ablation-name>Vi-ST baseline</h3><p data-vist-ablation-description>The complete Vi-ST model serves as the reference for the ablation experiments.</p><div class="vist-ablation-metric"><div><span>PEARSON CC</span><strong data-vist-ablation-score>≈0.3340</strong></div><math class="vist-ablation-delta" data-vist-ablation-formula aria-label="Change in correlation from the baseline: zero"><mrow><mi mathvariant="normal">Δ</mi><mi mathvariant="normal">CC</mi><mo>=</mo><mn data-vist-ablation-delta>0.0000</mn></mrow></math></div></div>
+        </div>
+      </div>
+      <div class="vist-ablation-reading"><h3>What stands out</h3><p>Removing spikes alignment gives the largest reduction in these experiments: CC falls from approximately 0.3340 to 0.1699. Removing the DINOv2 attention and FFN blocks gives approximately 0.2812 while keeping patchify trainable; removing the video extractor gives approximately 0.2832. Using RMSE as the only loss gives approximately 0.3125.</p></div>
+      <p class="vist-ablation-note">CC values and changes are approximate.</p>
+      <noscript><p class="vist-ablation-note">Enable JavaScript to select a variant and highlight its associated module.</p></noscript>
+    </section>
+
+    <details class="vist-provenance" id="vist-provenance">
+      <summary><span><strong>About the interactive example</strong><small>Data sources and interpretation</small></span></summary>
+      <div class="vist-provenance-body"><p>The videos use the original stimulus frames and the measured curves use the recorded firing rates. Predictions were recovered from the paper's supplementary vector figures; line simplification makes them approximate. The example CC is the number printed in the paper.</p><p>The example covers frames 0–799 of Movie 2 or 0–899 of Movie 1. The population-level results above come separately from Table 2.</p><h3>What does the overlay show?</h3><p>The red overlay marks the dominant part of the selected cell's estimated receptive field: the region of the stimulus that influences its response. The estimate comes from white-noise recordings. For display, its magnitude is smoothed and normalized, and its vertical orientation is corrected to match the video. Its brightness is relative within each cell; it does not indicate response sign or prediction certainty.</p><h3>Limits of the comparison</h3><p>The experiments use two movies and 90 selected retinal ganglion cells. The within-movie results use an odd–even frame split and include a CRNN comparison with 80 cells. Correlation measures agreement in temporal trend; it is not an accuracy percentage.</p><p class="vist-data-credit">Retinal recordings and visual stimuli: Onken et al., <a href="https://doi.org/10.5061/dryad.4ch10" target="_blank" rel="noopener noreferrer">Dryad dataset ↗</a>.</p></div>
+    </details>
+    <section class="vist-citation" id="vist-citation" aria-labelledby="vist-citation-title">
+      <div class="vist-citation-heading"><div><p class="vist-section-index">CITATION</p><h2 id="vist-citation-title">Cite this work</h2><p>ECCV 2024 · Springer proceedings, 2025</p></div><div class="vist-copy-actions"><button type="button" data-vist-copy-bibtex>Copy BibTeX</button><span data-vist-copy-status role="status" aria-live="polite"></span></div></div>
+      <pre class="vist-bibtex"><code data-vist-bibtex>{bibtex}</code></pre>
+    </section>
+  </div>
+  <script is:inline defer src={`${assetBase}traces.js`}></script>
+  <script is:inline defer src={`${assetBase}rf.js`}></script>
+  <script is:inline defer src={`${assetBase}story.js`}></script>
+</div>

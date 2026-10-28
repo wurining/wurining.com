@@ -3,6 +3,7 @@ import { getTags } from "../lib/content";
 import { site } from "../lib/site";
 export async function getStaticPaths() {
   const aliases = [{ alias: "page/1", target: "/" }, { alias: "publications/page/1", target: "/publications/" },
+    { alias: "publications/aligning-neuronal-coding-of-dynamic-visual-scenes-with-foundation-vision-models", target: "/publications/vist/" },
     ...(await getTags()).map((tag) => ({ alias: `tags/${tag.slug}/page/1`, target: `/tags/${tag.slug}/` }))];
   return aliases.map(({ alias, target }) => ({ params: { alias }, props: { target } }));
 }

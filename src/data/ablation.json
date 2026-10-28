@@ -1,0 +1,158 @@
+{
+  "source": "12149-source/figs/ablation.pdf",
+  "sourceSha256": "f9583aa424644feda30f624d47317e9c548fdcc23f0d9963f19ddbbfb67566ce",
+  "metric": "Pearson correlation (CC), approximate from plotted vector positions",
+  "tickLabels": [
+    0.15,
+    0.25,
+    0.35
+  ],
+  "tickCoordinates": [
+    186.157279,
+    290.106346,
+    394.055412
+  ],
+  "coordinateTransform": "matrix(0,0.998085,0.998085,0,0,0.184418)",
+  "cases": [
+    {
+      "id": "baseline",
+      "paperLabel": "Vi-ST baseline",
+      "label": "Vi-ST baseline",
+      "scope": "baseline",
+      "change": "reference",
+      "maskLabel": "",
+      "description": "The complete Vi-ST model serves as the reference for the ablation experiments.",
+      "cc": 0.334002,
+      "vectorPosition": [
+        12.683621,
+        377.42591
+      ]
+    },
+    {
+      "id": "causal",
+      "paperLabel": "Replace Causal Dilated 3D-CNN",
+      "label": "Replace causal dilated 3D-CNN",
+      "scope": "temporal",
+      "change": "replace",
+      "maskLabel": "3D-CNN replaced",
+      "description": "Replace the causal dilated 3D convolution in the video feature extractor.",
+      "cc": 0.326201,
+      "vectorPosition": [
+        40.862585,
+        369.31663
+      ]
+    },
+    {
+      "id": "rf-mask",
+      "paperLabel": "Remove Receptive Field Masked",
+      "label": "Remove receptive-field mask",
+      "scope": "rf",
+      "change": "remove",
+      "maskLabel": "RF mask removed",
+      "description": "Remove receptive-field masking.",
+      "cc": 0.328102,
+      "vectorPosition": [
+        69.045462,
+        371.293071
+      ]
+    },
+    {
+      "id": "condition",
+      "paperLabel": "Replace condition as video",
+      "label": "Stack RF grids across time",
+      "scope": "rf-stack",
+      "change": "replace",
+      "maskLabel": "RF × T",
+      "description": "Repeat the receptive-field grid along the time axis to form an RF grid stack with the same length T as the video.",
+      "cc": 0.326201,
+      "vectorPosition": [
+        97.22834,
+        369.31663
+      ]
+    },
+    {
+      "id": "cmst",
+      "paperLabel": "Replace Causal Multiscale Block",
+      "label": "Replace causal multiscale block",
+      "scope": "multiscale",
+      "change": "replace",
+      "maskLabel": "Causal → non-causal",
+      "description": "Replace the causal temporal convolutions in the multiscale blocks with standard non-causal convolutions.",
+      "cc": 0.331999,
+      "vectorPosition": [
+        125.407304,
+        375.343797
+      ]
+    },
+    {
+      "id": "kernel",
+      "paperLabel": "Remove Multiscale Kernel",
+      "label": "Set temporal kernels to 1 × 1 × 1",
+      "scope": "multiscale",
+      "change": "replace",
+      "maskLabel": "Kernels → 1 × 1 × 1",
+      "description": "Replace the temporal convolution kernels in the multiscale blocks with 1 × 1 × 1 kernels.",
+      "cc": 0.3223,
+      "vectorPosition": [
+        153.590181,
+        365.26199
+      ]
+    },
+    {
+      "id": "loss",
+      "paperLabel": "Replace loss by RMSE",
+      "label": "Replace loss with RMSE",
+      "scope": "loss",
+      "change": "replace",
+      "maskLabel": "",
+      "description": "The baseline uses Vi-ST loss; this variant uses RMSE as the only loss.",
+      "cc": 0.3125,
+      "vectorPosition": [
+        181.773059,
+        355.074512
+      ]
+    },
+    {
+      "id": "prior",
+      "paperLabel": "Remove DINOv2 prior",
+      "label": "Remove DINOv2 prior",
+      "scope": "prior",
+      "change": "remove",
+      "maskLabel": "Blocks removed",
+      "description": "Remove all DINOv2 attention and FFN blocks, while keeping patchify trainable.",
+      "cc": 0.281201,
+      "vectorPosition": [
+        209.955936,
+        322.53955
+      ]
+    },
+    {
+      "id": "extractor",
+      "paperLabel": "Remove Video Extractor",
+      "label": "Remove video extractor",
+      "scope": "extractor",
+      "change": "remove",
+      "maskLabel": "Video extractor removed",
+      "description": "Remove the video feature extractor.",
+      "cc": 0.2832,
+      "vectorPosition": [
+        238.1349,
+        324.617749
+      ]
+    },
+    {
+      "id": "alignment",
+      "paperLabel": "Remove Spikes Alignment",
+      "label": "Remove spikes alignment",
+      "scope": "alignment",
+      "change": "remove",
+      "maskLabel": "Spikes alignment removed",
+      "description": "Remove the spikes alignment module.",
+      "cc": 0.169898,
+      "vectorPosition": [
+        266.317778,
+        206.841422
+      ]
+    }
+  ]
+}

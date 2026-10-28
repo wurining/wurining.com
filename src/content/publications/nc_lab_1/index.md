@@ -1,7 +1,7 @@
 ---
 author: ["Rining Wu"]
 title: "Aligning Neuronal Coding of Dynamic Visual Scenes with Foundation Vision Models"
-slug: "aligning-neuronal-coding-of-dynamic-visual-scenes-with-foundation-vision-models"
+slug: "vist"
 # show in list page
 summary: "Proposed Vi-ST demonstrates a novel modeling framework for neuronal coding of dynamic visual scenes in the brain, effectively aligning our brain representation of video with neuronal activity."
 # show in single page

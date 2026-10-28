@@ -2,6 +2,8 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import PostMeta from "../../../components/PostMeta.astro";
 import Icon from "../../../components/Icon.astro";
+import ViSTStory from "../../../components/ViSTStory.astro";
+import ViSTSidebar from "../../../components/ViSTSidebar.astro";
 import { getPublications, tagSlug } from "../../../lib/content";
 import { site } from "../../../lib/site";
 export async function getStaticPaths() {
@@ -13,7 +15,11 @@ const absoluteUrl = new URL(post.url, site.url).href;
 const tweet = `https://x.com/intent/tweet/?${new URLSearchParams({ text: post.title, url: absoluteUrl, hashtags: post.tags.map((tag) => tag.replace(/\s/g, "")).join(",") })}`;
 const linkedin = `https://www.linkedin.com/shareArticle?${new URLSearchParams({ mini: "true", url: absoluteUrl, title: post.title, summary: post.title, source: absoluteUrl })}`;
 ---
-<BaseLayout title={post.title} description={post.description || post.summary} post={post} list={false}>
+{post.slug === "vist" ? <BaseLayout title={post.title} description={post.description || post.summary} post={post} list={false} dossier postFormatting={false}>
+  <link slot="head" rel="stylesheet" href="./assets/story.css" />
+  <ViSTSidebar slot="sidebar" />
+  <ViSTStory assetBase="./assets/" />
+</BaseLayout> : <BaseLayout title={post.title} description={post.description || post.summary} post={post} list={false}>
   <article class="post-single">
     <header class="post-header">
       <h1 class="post-title entry-hint-parent">{post.title}</h1>
@@ -29,4 +35,4 @@ const linkedin = `https://www.linkedin.com/shareArticle?${new URLSearchParams({ 
       {!post.disableShare && <ul class="share-buttons"><li><a target="_blank" rel="noopener noreferrer" aria-label={`share ${post.title} on x`} href={tweet}><Icon name="share-x" /></a></li><li><a target="_blank" rel="noopener noreferrer" aria-label={`share ${post.title} on linkedin`} href={linkedin}><Icon name="share-linkedin" /></a></li></ul>}
     </footer>
   </article>
-</BaseLayout>
+</BaseLayout>}
